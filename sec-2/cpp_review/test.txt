@@ -1,3 +1,0 @@
-This is a line in a file
-Here are some numbers:
-j k l 36 42 274.3
