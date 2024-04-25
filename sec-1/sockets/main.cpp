@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "SDL.h"
 
 int run_server() {
 	// Simple demo to demonstrate serialization
@@ -30,7 +31,7 @@ std::string getCurrentLocation() {
 	return main_cpp_folder.string();
 }
 
-
+#undef main
 int main()
 {
 
@@ -47,6 +48,8 @@ int main()
 	myInv.updatePc();
 	myInv.readPC();
 
+
+	return 0;
 }
 
 //int main(int argc, char *argv[]) {
