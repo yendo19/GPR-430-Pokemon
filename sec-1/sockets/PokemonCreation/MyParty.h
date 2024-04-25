@@ -121,6 +121,116 @@ public:
     void pokemonCreation()
     {
         system("cls");
+        std::string name;
+        std::string temp;
+        int hp = 201, speed, k = 0;;
+        bool possible = false;
+        attacks atks[4];
+
+        std::cout << "Enter Pokemon Name: ";
+        std::cin >> name;
+        std::cout << "\n         Pokemon Name:\n             " << name << std::endl << std::endl;
+
+
+        std::cout << "Enter Pokemon HP (HP + Speed will equal 200. The more HP the Slower it will be!): ";
+        std::cin >> hp;
+
+        while (!possible)
+        {
+            if (hp < 190 && hp > 10)
+            {
+                possible = true;
+                break;
+            }
+            else
+            {
+                std::cout << "\nHP Cannot be more than 190 and less that 10!\n";
+                std::cout << "Please re-enter valid HP: ";
+                std::cin >> hp;
+            }
+        }
+
+        speed = 200 - hp;
+        std::cout << "\n         HP:    Speed:\n              " << hp << "      " << speed << std::endl << std::endl;
+
+        for (int i = 0; i < 4; i++)
+        {
+            possible = false;
+            std::cout << "\nEnter attack " << i+1 << " name: ";
+            std::cin >> temp;
+            atks[i].setName(temp);
+            //NEED ATTACK DAMAGE LIMITER/BALANCE SOMEHOW
+            std::cout << "Enter attack " << i+1 << " Damage (10-100): ";
+            std::cin >> temp;
+            while (!possible)
+            {
+                if (std::stoi(temp))
+                {
+                    if (std::stoi(temp) > 10 && std::stoi(temp) < 100)
+                    {
+                        possible = true;
+                        atks[i].setDamage(std::stoi(temp));
+                        break;
+                    }
+                    else
+                    {
+                        std::cout << "\nPlease Enter Valid Number: ";
+                        std::cin >> temp;
+                        break;
+                    }
+                }
+                else
+                {
+                    std::cout << "\nPlease Enter Valid Number: ";
+                    std::cin >> temp;
+                }
+            }
+        }
+        system("cls");
+        std::cout << "*******************************************************\n";
+        std::cout << "                  " << name << "               \n";
+        std::cout << "          HP: " << hp << "          SPEED: " << speed << std::endl << std::endl;
+        std::cout << "*******************************************************\n\n";
+        
+
+        for each (attacks atk in atks)
+        {
+            std::cout << "   Attack Name: " << atk.getName() << "     Attack Damage: " << atk.getDamage() << std::endl;
+            k++;
+        }
+
+
+        std::cout << "\n\n\nCreate Pokemon? (Y/N): ";
+        std::cin >> temp;
+        possible = false;
+        while (!possible)
+        {
+            if (temp == "y" || temp == "Y" || temp == "n" || temp == "N")
+            {
+                possible = true;
+                break;
+            }
+            else
+            {
+                std::cout << "Please enter Y or N: ";
+                std::cin >> temp;
+            }
+        }
+
+        if ((temp == "y" || temp == "Y"))
+        {
+            Pokemon temp(name, hp, speed, atks, fileDir);
+            temp.CreateFiles();
+            std::cout << "\n\n POKEMON CREATED!" << std::endl;
+            system("pause");
+            Update();
+        }
+        else
+        {
+            std::cout << "\n\n POKEMON DELETED!" << std::endl;
+            system("pause");
+            Update();
+        }
 
     }
 
