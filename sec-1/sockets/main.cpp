@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 
+
 int run_server() {
 	// Simple demo to demonstrate serialization
 	// over TCP
@@ -32,6 +33,7 @@ std::string getCurrentLocation() {
 
 int main()
 {
+
 	std::string filePath = getCurrentLocation();
 	filePath += "/PokemonCreation";
 
@@ -39,9 +41,16 @@ int main()
 	myParty myInv = myParty();
 	myInv.Init(filePath);
 	myInv.CreateFolder();
-	myInv.createPokemon("poke1", 3);
-	myInv.createPokemon("poke2", 5);
-	myInv.createPokemon("poke3", 78);
+	myInv.Update();
+	//attacks myAttacks[4];
+	//myAttacks[0] = attacks("first", 10);
+	//myAttacks[1] = attacks("second", 20);
+	//myAttacks[2] = attacks("third", 30);
+	//myAttacks[3] = attacks("forth", 40);
+
+	//myInv.createPokemon("poke1",140, 30, myAttacks);
+	//myInv.createPokemon("poke2", 5);
+	//myInv.createPokemon("poke3", 78);
 
 	myInv.updatePc();
 	myInv.readPC();
