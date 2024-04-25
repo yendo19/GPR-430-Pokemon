@@ -1,9 +1,20 @@
-#include "pokemonCreator.h"
-#include <filesystem>
-#include <experimental/filesystem>
+#pragma once
+#include "MyParty.h"
+
+void myParty::myParty()
+{
+    fileDir = "C:\\Pokemans";
+    
+}
+
+void myParty::~myParty()
+{
+    //f
+}
+
 void myParty::Init()
 {
-    CreateFolder();
+    std::cout << "init";
 }
 
 void myParty::Update()
@@ -13,16 +24,13 @@ void myParty::Update()
 
 void myParty::CreateFiles()
 {
-    CreateFolder();
-    std::string fileName = _name + ".txt";
-    std::ofstream file(fs::path(folderName) / fileName);
+    std::cout << "doing something";
 }
 
 void myParty::CreateFolder()
 {
-    std::string folderName = "pokemans";
-    if (!fs::exists(folderName))
-        fs::create_directory(folderName);
+    std::cout << "doing something";
+    ///CreateDirectory(directoryPath.c_str(), NULL);
 }
 
 std::list<std::string> myParty::CheckForFiles()

@@ -23,11 +23,17 @@ int run_server() {
 	}
 }
 
-int main(int argc, char *argv[]) {
-
+int main()
+{
 	std::cout << "hi";
-
 	myInv.Init();
+}
+
+//int main(int argc, char *argv[]) {
+//
+//	std::cout << "hi";
+//
+//	myInv.Init();
 
 	//SockLibInit();
 	//atexit(SockLibShutdown);
@@ -113,4 +119,4 @@ int main(int argc, char *argv[]) {
 
 
 	//return 0;
-}
+//
