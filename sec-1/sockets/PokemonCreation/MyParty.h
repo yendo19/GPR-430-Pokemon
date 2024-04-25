@@ -112,6 +112,9 @@ public:
             exit(0);
             break;
         default:
+            std::cin.clear();
+            std::cin.ignore(9999, '\n');
+            Update();
             break;
         }
         
@@ -137,13 +140,15 @@ public:
 
         while (!possible)
         {
-            if (hp < 190 && hp > 10)
+            if (hp <= 190 && hp >= 10)
             {
                 possible = true;
                 break;
             }
             else
             {
+                std::cin.clear();
+                std::cin.ignore(9999, '\n');
                 std::cout << "\nHP Cannot be more than 190 and less that 10!\n";
                 std::cout << "Please re-enter valid HP: ";
                 std::cin >> hp;
@@ -164,23 +169,30 @@ public:
             std::cin >> temp;
             while (!possible)
             {
-                if (std::stoi(temp))
+                try
                 {
-                    if (std::stoi(temp) > 10 && std::stoi(temp) < 100)
+                    std::stoi(temp);
+                    if (std::stoi(temp) >= 10 && std::stoi(temp) <= 100)
                     {
                         possible = true;
                         atks[i].setDamage(std::stoi(temp));
+                        std::cin.clear();
+                        std::cin.ignore(9999, '\n');
                         break;
                     }
                     else
                     {
+                        std::cin.clear();
+                        std::cin.ignore(9999, '\n');
                         std::cout << "\nPlease Enter Valid Number: ";
                         std::cin >> temp;
                         break;
                     }
                 }
-                else
+                catch(...)
                 {
+                    std::cin.clear();
+                    std::cin.ignore(9999, '\n');
                     std::cout << "\nPlease Enter Valid Number: ";
                     std::cin >> temp;
                 }
@@ -212,6 +224,8 @@ public:
             }
             else
             {
+                std::cin.clear();
+                std::cin.ignore(9999, '\n');
                 std::cout << "Please enter Y or N: ";
                 std::cin >> temp;
             }
