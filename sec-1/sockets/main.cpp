@@ -3,12 +3,12 @@
 #include <string>
 #include <time.h>
 #include <stdlib.h>
-
+#include <filesystem>
 #include "socklib.h"
 #include "defer.h"
 #include "PokemonCreation/MyParty.h"
-
-myParty myInv;
+#include <iostream>
+#include <fstream>
 
 int run_server() {
 	// Simple demo to demonstrate serialization
@@ -23,10 +23,29 @@ int run_server() {
 	}
 }
 
+std::string getCurrentLocation() {
+	std::filesystem::path main_cpp_path = __FILE__;
+	std::filesystem::path main_cpp_folder = main_cpp_path.parent_path();
+	return main_cpp_folder.string();
+}
+
+
 int main()
 {
-	std::cout << "hi";
-	myInv.Init();
+	std::string filePath = getCurrentLocation();
+	filePath += "/PokemonCreation";
+
+
+	myParty myInv = myParty();
+	myInv.Init(filePath);
+	myInv.CreateFolder();
+	myInv.createPokemon("poke1", 3);
+	myInv.createPokemon("poke2", 5);
+	myInv.createPokemon("poke3", 78);
+
+	myInv.updatePc();
+	myInv.readPC();
+
 }
 
 //int main(int argc, char *argv[]) {
