@@ -42,8 +42,7 @@ int main()
 	myParty myInv = myParty();
 	myInv.Init(filePath);
 	myInv.CreateFolder();
-	myInv.Update();
-
+	//myInv.Update();
 
 	myInv.updatePc();
 	myInv.readPC();

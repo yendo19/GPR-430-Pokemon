@@ -1,0 +1,4 @@
+Name : HP : Current HP : Speed : ATTACKS
+
+ATTACKS
+Name : Damage

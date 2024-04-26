@@ -54,6 +54,12 @@ public:
             }
         }
     }
+
+#pragma region Serialize/Deserialize
+
+
+#pragma endregion
+
 #pragma endregion
 
 #pragma region PC Functions
@@ -74,7 +80,11 @@ public:
     {
         for each (Pokemon poke in PC)
         {
-            poke.coutData();
+           // poke.coutData();
+            std::list<char> holder;
+            holder = poke.serialize();
+            for (char c : holder)
+                std::cout << c;
         }
     }
 #pragma endregion

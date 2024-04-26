@@ -11,7 +11,8 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
-
+#include <iomanip>
+#include <sstream>
 
 class Pokemon
 {
@@ -30,7 +31,12 @@ public:
 			_myAttacks[i] = atks[i];
 		}
 	}
-
+	
+	Pokemon(std::list<char> serialized)
+	{
+		deserialize();
+	}
+	
 	Pokemon(std::string file)
 	{
 		_name = "";
@@ -105,10 +111,77 @@ public:
 		std::cout << "Attacks:\n";
 		for each (attacks atk in _myAttacks)
 		{
-			std::cout << "    " << i << ": " << atk.getName() << "     DMG: " << atk.getDamage() << std::endl;
+			std::cout << "    " << i << ": " << atk.getName() << std::setw(50) << std::right<< "     DMG: "  <<atk.getDamage() << std::endl;
 			i++;
 		}
 	}
+#pragma endregion
+
+#pragma region Serialize/Deserialize
+	std::list<char> serialize()
+	{
+		std::list<char> temp;
+		std::stringstream num;
+		std::string numbers;
+		for (char c : _name)
+			temp.push_back(c);
+
+		temp.push_back(':');
+		num.str("");
+		num.clear();
+		numbers.erase();
+		num << _maxHealth;
+		numbers = num.str();
+		std::cout << numbers << std::endl;
+		for (char c : numbers)
+			temp.push_back(c);
+
+		temp.push_back(':');
+		num.str("");
+		num.clear();
+		numbers.erase();
+		num << _currentHealth;
+		numbers = num.str();
+		std::cout << numbers << std::endl;
+		for (char c : numbers)
+			temp.push_back(c);
+
+		temp.push_back(':');
+		num.str("");
+		num.clear();
+		numbers.erase();
+		num << _speed;
+		numbers = num.str();
+		std::cout << numbers << std::endl;
+		for (char c : numbers)
+			temp.push_back(c);
+
+
+		for (attacks atk : _myAttacks)
+		{
+			temp.push_back(':');
+			for (char c : atk.getName())
+				temp.push_back(c);
+			temp.push_back(':');
+			num.str("");
+			num.clear();
+			numbers.erase();
+			num << atk.getDamage();
+			numbers = num.str();
+			std::cout << numbers << std::endl;
+			for (char c : numbers)
+				temp.push_back(c);
+		}
+		
+		return temp;
+	}
+
+	void deserialize()
+	{
+
+	}
+
+
 #pragma endregion
 
 
