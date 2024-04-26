@@ -12,6 +12,14 @@
 
 #include "SDL.h"
 
+#include "button.h"
+
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+
+SDL_Window* wind;
+SDL_Renderer* rend;
+
 int run_server() {
 	// Simple demo to demonstrate serialization
 	// over TCP
@@ -31,13 +39,42 @@ std::string getCurrentLocation() {
 	return main_cpp_folder.string();
 }
 
+int setupSDL()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
+		printf("Error initializing SDL: %s\n", SDL_GetError());
+	}
+
+	wind = SDL_CreateWindow("Pokeman Duel",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+	if (!wind)
+	{
+		printf("Error creating window: %s\n", SDL_GetError());
+		SDL_Quit();
+		return 0;
+	}
+
+	/* Create a renderer */
+	Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+	rend = SDL_CreateRenderer(wind, -1, render_flags);
+	if (!rend)
+	{
+		printf("Error creating renderer: %s\n", SDL_GetError());
+		SDL_DestroyWindow(wind);
+		SDL_Quit();
+		return 0;
+	}
+}
+
 #undef main
 int main()
 {
 
 	std::string filePath = getCurrentLocation();
 	filePath += "/PokemonCreation";
-
 
 	myParty myInv = myParty();
 	myInv.Init(filePath);
@@ -47,6 +84,38 @@ int main()
 	myInv.updatePc();
 	myInv.readPC();
 
+	setupSDL();
+
+	bool running = true;
+	SDL_Event event;
+
+	Button b = Button(rend, SDL_Color{255, 50, 50, 255});
+	b.updateRect(50, 50, 50, 50);
+
+	int* mouseX = 0;
+	int* mouseY = 0;
+
+	//GAME LOOP
+	while (running)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+			case SDL_QUIT:
+				running = false;
+				break;
+			}
+		}
+		SDL_GetMouseState(mouseX, mouseY);
+
+		SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
+		SDL_RenderClear(rend);
+
+		//b.update(*mouseX, *mouseY);
+		
+		SDL_RenderPresent(rend);
+	}
 
 	return 0;
 }
