@@ -21,8 +21,6 @@ const int SCREEN_HEIGHT = 480;
 SDL_Window* wind;
 SDL_Renderer* rend;
 
-std::list<Button> activeButtons;
-
 int run_server() {
 	// Simple demo to demonstrate serialization
 	// over TCP
@@ -81,29 +79,39 @@ float time_now() {
 	return clocks_to_secs(clock());
 }
 
+void pickAttack(std::string data)
+{
+	//temporarily just print out the data
+	std::cout << data;
+}
+
 #undef main
 int main()
 {
-
 	std::string filePath = getCurrentLocation();
 	filePath += "/PokemonCreation";
 
 	myParty myInv = myParty();
 	myInv.Init(filePath);
 	myInv.CreateFolder();
-	//myInv.Update();
+	myInv.Update();
 
 	myInv.updatePc();
-	myInv.readPC();
+	//myInv.readPC();
 
 	setupSDL();
 
 	bool running = true;
 	SDL_Event event;
 
-	Button b = Button(SDL_GetWindowSurface(wind), SDL_Color{255, 50, 50, 255}, SDL_Color{255, 100, 100, 255});
-	activeButtons.push_back(b);
-	b.updateRect(50, 50, 50, 50);
+	std::list<Button> attacks;
+	for (int i = 0; i < 4; i++)
+	{
+		Button b = Button(SDL_GetWindowSurface(wind), SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 });
+		b.updateCallback(pickAttack, "HELP\n");
+		b.updateRect(50, 50, 50, 50);
+		attacks.push_back(b);
+	}
 
 	int* mouseX = new int(0);
 	int* mouseY = new int(0);
@@ -137,7 +145,10 @@ int main()
 		}
 
 		//UPDATE ALL OBJECTS
-		b.update(*mouseX, *mouseY, mbUp);
+		for (Button b : attacks)
+		{
+			b.update(*mouseX, *mouseY, mbUp);
+		}
 
 		SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
 		SDL_RenderClear(rend);

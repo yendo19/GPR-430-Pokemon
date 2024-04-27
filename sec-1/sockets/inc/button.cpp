@@ -1,6 +1,7 @@
 #include "button.h"
 #include <iostream>
 
+
 Button::Button(SDL_Surface* surface, SDL_Color color, SDL_Color highlightColor)
 {
 	this->surface = surface;
@@ -13,14 +14,10 @@ Button::~Button()
 
 }
 
-void Button::onClick()
+void Button::updateCallback(std::function<void(std::string data)> func, std::string data)
 {
-	std::cout << "BUTTON NOT IMPLEMENTED" << std::endl;
-}
-
-void AttackButton::onClick()
-{
-
+	callback = func;
+	this->data = data;
 }
 
 void Button::updateRect(int width, int height, int posX, int posY)
@@ -60,6 +57,6 @@ void Button::update(int x, int y, bool mbPressed)
 
 	if (inBounds && mbPressed)
 	{
-		this->onClick();
+		this->callback(data);
 	}
 }

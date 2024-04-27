@@ -119,8 +119,7 @@ public:
             checkPC();
             break;
         case 4:
-            exit(0);
-            break;
+            return;
         default:
             std::cin.clear();
             std::cin.ignore(9999, '\n');
