@@ -100,14 +100,17 @@ void pickAttack(std::string data)
 	std::cout << data;
 }
 
-void serializeAttack(Pokemon pkmn, attacks atk)
+std::string serializeMove(Pokemon pkmn, attacks atk)
 {
-	std::list<char> temp;
+	std::string temp;
 	std::stringstream num;
 	std::string numbers;
-
-
-
+	
+	num.str("");
+	num << pkmn.getSpeed();
+	numbers = num.str();
+	for (char c : numbers)
+		temp.push_back(c);
 	temp.push_back(':');
 	for (char c : atk.getName())
 		temp.push_back(c);
@@ -117,9 +120,10 @@ void serializeAttack(Pokemon pkmn, attacks atk)
 	numbers.erase();
 	num << atk.getDamage();
 	numbers = num.str();
-	std::cout << numbers << std::endl;
 	for (char c : numbers)
 		temp.push_back(c);
+
+	return temp;
 }
 
 void setupAttacks(std::list<Button>* attacks, Pokemon active)
@@ -136,7 +140,9 @@ void setupAttacks(std::list<Button>* attacks, Pokemon active)
 		std::string display = active.getAttackAt(i).getName() + " : " + std::to_string(active.getAttackAt(i).getDamage());
 		attacks->push_back(Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, display));
 
-		attacks->back().updateCallback(pickAttack, "HELP\n");
+		std::string move = serializeMove(active, active.getAttackAt(i));
+
+		attacks->back().updateCallback(pickAttack, move);
 		attacks->back().updateRect(100, 50, buttonPosX, buttonPosY);
 		buttonPosX += buttonSpacingX;
 		if ((i + 1) % 2 == 0)
