@@ -66,9 +66,12 @@ public:
     //im gonna die
     void updatePc()
     {
+        /*holder*/ bool i = false;
         getFileNames();
         for each (std::string file in fileNames)
         {
+            if (!i)
+                setParty(file);
             Pokemon temp(fileDir);
             temp.readFiles(file);
             PC.push_back(temp);
@@ -280,9 +283,18 @@ public:
         temp.CreateFiles();
     }
 
+    /*Placeholder for now*/
+    void setParty(std::string dir)
+    {
+        for (Pokemon pkm : _myPokemon)
+        {
+            pkm.readFiles(dir);
+        }
+    }
+
 
 private:
-	//Pokemon _myPokemon[3];
+	Pokemon _myPokemon[3];
 	std::list<Pokemon> PC;
     std::list<std::string> fileNames;
 	std::string fileDir;

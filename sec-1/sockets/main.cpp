@@ -94,6 +94,7 @@ int main()
 	myParty myInv = myParty();
 	myInv.Init(filePath);
 	myInv.CreateFolder();
+	myInv.updatePc();
 	myInv.Update();
 
 	//myInv.updatePc();
