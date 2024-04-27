@@ -13,9 +13,7 @@ file(
 	GLOB_RECURSE POKE_SRC "inc/*.cpp"
 )
 
-add_custom_target(copyAssets ALL COMMAND ${CMAKE_COMMAND} -E copy_directory
-${CMAKE_CURRENT_SOURCE_DIR}/assets/
-${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
 
 install(FILES ${POKE_INC} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Pokeman)
 add_executable(Pokeman main.cpp socklib_generic.cpp ${POKE_SRC} ${POKE_INC})
@@ -38,5 +36,3 @@ if (WIN32)
 endif (WIN32)
 
 target_sources(Pokeman PRIVATE pool.cpp)
-
-add_dependencies(Pokeman copyAssets)

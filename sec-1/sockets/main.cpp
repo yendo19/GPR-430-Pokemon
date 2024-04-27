@@ -70,7 +70,17 @@ void setupSDL()
 		SDL_Quit();
 	}
 
-	encode = TTF_OpenFont("assets/EncodeRegular.ttf", 18);
+	if (TTF_Init() != 0)
+	{
+		printf("Error Initializing TTF%s\n", TTF_GetError());
+		TTF_Quit();
+	}
+
+	encode = TTF_OpenFont("assets/EncodeRegular.ttf", 12);
+	if (encode == NULL)
+	{
+		std::cout << SDL_GetError() << std::endl;
+	}
 }
 
 //FROM IN CLASS CODE
@@ -85,8 +95,56 @@ float time_now() {
 
 void pickAttack(std::string data)
 {
-	//temporarily just print out the data
+	//TODO:send the chosen attack's power to the other player
+	//for now, just print out the data
 	std::cout << data;
+}
+
+void serializeAttack(Pokemon pkmn, attacks atk)
+{
+	std::list<char> temp;
+	std::stringstream num;
+	std::string numbers;
+
+
+
+	temp.push_back(':');
+	for (char c : atk.getName())
+		temp.push_back(c);
+	temp.push_back(':');
+	num.str("");
+	num.clear();
+	numbers.erase();
+	num << atk.getDamage();
+	numbers = num.str();
+	std::cout << numbers << std::endl;
+	for (char c : numbers)
+		temp.push_back(c);
+}
+
+void setupAttacks(std::list<Button>* attacks, Pokemon active)
+{
+
+	int buttonPosXStart = 100;
+	int buttonPosX = buttonPosXStart;
+	int buttonPosY = 100;
+	int buttonSpacingX = 120;
+	int buttonSpacingY = 70;
+
+	for (int i = 0; i < 4; i++)
+	{
+		std::string display = active.getAttackAt(i).getName() + " : " + std::to_string(active.getAttackAt(i).getDamage());
+		attacks->push_back(Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, display));
+
+		attacks->back().updateCallback(pickAttack, "HELP\n");
+		attacks->back().updateRect(100, 50, buttonPosX, buttonPosY);
+		buttonPosX += buttonSpacingX;
+		if ((i + 1) % 2 == 0)
+		{
+			buttonPosX = buttonPosXStart;
+			buttonPosY += buttonSpacingY;
+		}
+	}
 }
 
 #undef main
@@ -120,24 +178,8 @@ int main()
 	SDL_Event event;
 
 	std::list<Button> attacks;
-	int buttonPosXStart = 100;
-	int buttonPosX = buttonPosXStart;
-	int buttonPosY = 100;
-	int buttonSpacingX = 120;
-	int buttonSpacingY = 70;
-	for (int i = 0; i < 4; i++)
-	{
-		Button b = Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, "ATTACK_NAME (PWR)");
-		b.updateCallback(pickAttack, "HELP\n");
-		b.updateRect(100, 50, buttonPosX, buttonPosY);
-		buttonPosX += buttonSpacingX;
-		if ((i+1)% 2 == 0)
-		{
-			buttonPosX = buttonPosXStart;
-			buttonPosY += buttonSpacingY;
-		}
-		attacks.push_back(b);
-	}
+
+	setupAttacks(&attacks, myInv.getPokemonInPartyAt(0));
 
 	int* mouseX = new int(0);
 	int* mouseY = new int(0);
@@ -179,7 +221,6 @@ int main()
 		}
 
 		SDL_RenderPresent(rend);
-		SDL_UpdateWindowSurface(wind);
 	}
 
 	delete mouseX;
