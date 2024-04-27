@@ -25,6 +25,7 @@ private:
 	std::string label;
 	SDL_Rect rect;
 
+	SDL_Surface* surfaceMessage;
 	SDL_Texture* text;
 
 	std::string data;

@@ -117,7 +117,7 @@ int main()
 	int buttonSpacingY = 70;
 	for (int i = 0; i < 4; i++)
 	{
-		Button b = Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, "ATTACKNAME(PWR)");
+		Button b = Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, "ATTACK_NAME (PWR)");
 		b.updateCallback(pickAttack, "HELP\n");
 		b.updateRect(100, 50, buttonPosX, buttonPosY);
 		buttonPosX += buttonSpacingX;

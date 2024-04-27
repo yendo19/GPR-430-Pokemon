@@ -8,13 +8,14 @@ Button::Button(SDL_Renderer* rend,TTF_Font* font, SDL_Color color, SDL_Color hig
 	this->bgColor = color;
 	this->highlightColor = highlightColor;
 
-	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, message.data(), SDL_Color{255, 255, 255});
+	surfaceMessage = TTF_RenderText_Solid(font, message.data(), SDL_Color{255, 255, 255});
 	text = SDL_CreateTextureFromSurface(rend, surfaceMessage);
 }
 
 Button::~Button()
 {
-
+	SDL_FreeSurface(surfaceMessage);
+	SDL_DestroyTexture(text);
 }
 
 void Button::updateCallback(std::function<void(std::string data)> func, std::string data)
