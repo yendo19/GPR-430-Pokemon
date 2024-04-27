@@ -1,0 +1,11 @@
+CoolNameLol
+30
+170
+SomeAttack
+20
+SomeOtherAttack
+100
+SomOtherlongAAttack
+40
+Attack
+50

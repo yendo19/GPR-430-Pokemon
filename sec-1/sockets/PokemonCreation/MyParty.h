@@ -103,7 +103,8 @@ public:
         std::cout << " \n\n 1. Create new Pokemon\n";
         std::cout << " 2. Choose Party\n";
         std::cout << " 3. Check PC\n";
-        std::cout << " 4. Exit\n";
+        std::cout << " 4. Go Fight!\n";
+        std::cout << " 5. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> i; 
 
@@ -120,6 +121,8 @@ public:
             break;
         case 4:
             return;
+        case 5:
+            exit(1);
         default:
             std::cin.clear();
             std::cin.ignore(9999, '\n');

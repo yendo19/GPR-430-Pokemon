@@ -96,7 +96,7 @@ int main()
 	myInv.CreateFolder();
 	myInv.Update();
 
-	myInv.updatePc();
+	//myInv.updatePc();
 	//myInv.readPC();
 
 	setupSDL();
