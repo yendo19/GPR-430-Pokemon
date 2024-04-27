@@ -9,16 +9,19 @@
 #include "PokemonCreation/MyParty.h"
 #include <iostream>
 #include <fstream>
+#include <list>
 
 #include "SDL.h"
 
-#include "button.h"
+#include "inc/button.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
 SDL_Window* wind;
 SDL_Renderer* rend;
+
+std::list<Button> activeButtons;
 
 int run_server() {
 	// Simple demo to demonstrate serialization
@@ -39,14 +42,14 @@ std::string getCurrentLocation() {
 	return main_cpp_folder.string();
 }
 
-int setupSDL()
+void setupSDL()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		printf("Error initializing SDL: %s\n", SDL_GetError());
 	}
 
-	wind = SDL_CreateWindow("Pokeman Duel",
+	wind = SDL_CreateWindow("Pokeman(?) Duel",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		SCREEN_WIDTH, SCREEN_HEIGHT, 0);
@@ -54,7 +57,7 @@ int setupSDL()
 	{
 		printf("Error creating window: %s\n", SDL_GetError());
 		SDL_Quit();
-		return 0;
+		return;
 	}
 
 	/* Create a renderer */
@@ -65,8 +68,17 @@ int setupSDL()
 		printf("Error creating renderer: %s\n", SDL_GetError());
 		SDL_DestroyWindow(wind);
 		SDL_Quit();
-		return 0;
 	}
+}
+
+//FROM IN CLASS CODE
+float clocks_to_secs(clock_t clocks) {
+	return (float)clocks / CLOCKS_PER_SEC;
+}
+
+//FROM IN CLASS CODE
+float time_now() {
+	return clocks_to_secs(clock());
 }
 
 #undef main
@@ -89,15 +101,25 @@ int main()
 	bool running = true;
 	SDL_Event event;
 
-	Button b = Button(rend, SDL_Color{255, 50, 50, 255});
+	Button b = Button(SDL_GetWindowSurface(wind), SDL_Color{255, 50, 50, 255}, SDL_Color{255, 100, 100, 255});
+	activeButtons.push_back(b);
 	b.updateRect(50, 50, 50, 50);
 
-	int* mouseX = 0;
-	int* mouseY = 0;
+	int* mouseX = new int(0);
+	int* mouseY = new int(0);
+	float last_frame_time = time_now();
+	float targetDt = 1 / 60.0f;
 
 	//GAME LOOP
 	while (running)
 	{
+		float now = time_now();
+		float dt = now - last_frame_time;
+		if (dt < targetDt)
+			continue;
+
+		SDL_GetMouseState(mouseX, mouseY);
+		bool mbUp = false;
 		while (SDL_PollEvent(&event))
 		{
 			switch (event.type)
@@ -105,109 +127,26 @@ int main()
 			case SDL_QUIT:
 				running = false;
 				break;
+			case SDL_MOUSEBUTTONUP:
+				if (event.button.button == SDL_BUTTON_LEFT)
+				{
+					mbUp = true;
+				}
+				break;
 			}
 		}
-		SDL_GetMouseState(mouseX, mouseY);
+
+		//UPDATE ALL OBJECTS
+		b.update(*mouseX, *mouseY, mbUp);
 
 		SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
 		SDL_RenderClear(rend);
 
-		//b.update(*mouseX, *mouseY);
-		
-		SDL_RenderPresent(rend);
+		SDL_UpdateWindowSurface(wind);
 	}
+
+	delete mouseX;
+	delete mouseY;
 
 	return 0;
 }
-
-//int main(int argc, char *argv[]) {
-//
-//	std::cout << "hi";
-//
-//	myInv.Init();
-
-	//SockLibInit();
-	//atexit(SockLibShutdown);
-
-	//if (argc > 1) {
-	//	return run_server();
-	//}
-
-	//// Initialize the system
-	//float last_frame = now();
-	//bool quit = false;
-	//int frame_num = 0;
-	//// One second per frame -- wow, that's slow!
-	//const float targetDt = 1;
-
-	//// Initialize the player "object"
-	//float character_pos = 0;
-	//float xVelocity = 1;
-
-	//// Initialize the socket system
-	//NetworkModule netsys;
-	//netsys.Init();
-
-	//GameObject go;
-	//go.x = 100001;
-	//go.y = 100002;
-	//go.z = 100003;
-	//go.xVel = 100010;
-	//go.yVel = 100011;
-	//go.zVel = 100012;
-
-	//go.sprite = "Hello, there!";
-	//std::cout << "===== Game Object as Bytes =====\n";
-	//print_as_bytes((char*)&go, sizeof(go));
-
-	//{
-	//	char buffer[4096];
-	//	size_t amt_written = SerializeGameObjectAsString(&go, buffer, sizeof(buffer));
-	//	std::string go_str(buffer, amt_written);
-	//	std::cout << "===== Game Object as String =====\n";
-	//	std::cout << "===== Size: " << amt_written << "   ====\n";
-	//	std::cout << "\"" << go_str << "\"" << std::endl;
-	//}
-
-	//{
-	//	char buffer[4096] = { 0 };
-	//	size_t amt_written = SerializeGameObjectAsBytes(&go, buffer, sizeof(buffer));
-	//	std::cout << "==== Serialized game object as Bytes =====\n";
-	//	std::cout << "===== Size: " << amt_written << "   ====\n";
-	//	print_as_bytes(buffer, amt_written);
-	//}
-
-	//return 0;
-
-	//while (!quit) {
-	//	float time = now();
-	//	float dt = time - last_frame;
-	//	if (dt < targetDt)
-	//		continue;
-	//	frame_num++;
-
-	//	// Process input -- is the keyboard pressed,
-	//	// is the mouse down, etc.?
-	//	netsys.Update(dt, frame_num);
-	//	
-	//	// Update all the game objects
-	//	character_pos += xVelocity * dt;
-
-	//	// Render
-	//	// Clear the back buffer
-	//	system("cls");
-
-	//	for (int i = 0; i < character_pos; i++) {
-	//		std::cout << " ";
-	//	}
-	//	std::cout << "@";
-	//	std::cout << std::endl << std::endl;
-	//	std::cout << to_display;
-
-	//	to_display = "";
-	//	last_frame = time;
-	//}
-
-
-	//return 0;
-//
