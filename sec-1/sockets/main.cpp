@@ -12,6 +12,7 @@
 #include <list>
 
 #include "SDL.h"
+#include "SDL_ttf.h"
 
 #include "inc/button.h"
 
@@ -20,6 +21,7 @@ const int SCREEN_HEIGHT = 480;
 
 SDL_Window* wind;
 SDL_Renderer* rend;
+TTF_Font* encode;
 
 int run_server() {
 	// Simple demo to demonstrate serialization
@@ -67,6 +69,8 @@ void setupSDL()
 		SDL_DestroyWindow(wind);
 		SDL_Quit();
 	}
+
+	encode = TTF_OpenFont("assets/EncodeRegular.ttf", 18);
 }
 
 //FROM IN CLASS CODE
@@ -106,11 +110,22 @@ int main()
 	SDL_Event event;
 
 	std::list<Button> attacks;
+	int buttonPosXStart = 100;
+	int buttonPosX = buttonPosXStart;
+	int buttonPosY = 100;
+	int buttonSpacingX = 120;
+	int buttonSpacingY = 70;
 	for (int i = 0; i < 4; i++)
 	{
-		Button b = Button(SDL_GetWindowSurface(wind), SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 });
+		Button b = Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, "ATTACKNAME(PWR)");
 		b.updateCallback(pickAttack, "HELP\n");
-		b.updateRect(50, 50, 50, 50);
+		b.updateRect(100, 50, buttonPosX, buttonPosY);
+		buttonPosX += buttonSpacingX;
+		if ((i+1)% 2 == 0)
+		{
+			buttonPosX = buttonPosXStart;
+			buttonPosY += buttonSpacingY;
+		}
 		attacks.push_back(b);
 	}
 
@@ -144,6 +159,8 @@ int main()
 				break;
 			}
 		}
+		SDL_SetRenderDrawColor(rend, 30, 30, 30, 255);
+		SDL_RenderClear(rend);
 
 		//UPDATE ALL OBJECTS
 		for (Button b : attacks)
@@ -151,9 +168,7 @@ int main()
 			b.update(*mouseX, *mouseY, mbUp);
 		}
 
-		SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
-		SDL_RenderClear(rend);
-
+		SDL_RenderPresent(rend);
 		SDL_UpdateWindowSurface(wind);
 	}
 

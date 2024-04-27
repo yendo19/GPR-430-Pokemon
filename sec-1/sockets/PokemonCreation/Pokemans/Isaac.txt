@@ -1,9 +1,9 @@
 Isaac
 22
 178
-Cry
+cry
 30
-Think
+worry
 80
 ponder
 50

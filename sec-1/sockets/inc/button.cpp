@@ -2,11 +2,14 @@
 #include <iostream>
 
 
-Button::Button(SDL_Surface* surface, SDL_Color color, SDL_Color highlightColor)
+Button::Button(SDL_Renderer* rend,TTF_Font* font, SDL_Color color, SDL_Color highlightColor, std::string message)
 {
-	this->surface = surface;
+	this->rend = rend;
 	this->bgColor = color;
 	this->highlightColor = highlightColor;
+
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, message.data(), SDL_Color{255, 255, 255});
+	text = SDL_CreateTextureFromSurface(rend, surfaceMessage);
 }
 
 Button::~Button()
@@ -50,10 +53,14 @@ void Button::update(int x, int y, bool mbPressed)
 {
 	bool inBounds = mouseInBounds(x, y);
 	SDL_Color c = ( inBounds ? highlightColor : bgColor);
-	if (SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, c.r, c.g, c.b)) != 0)
+	SDL_SetRenderDrawColor(rend, c.r, c.g, c.b, c.a);
+	if (SDL_RenderDrawRect(rend, &rect) != 0)
 	{
+
 		std::cout << "ERROR: Cannot draw button " << SDL_GetError() << std::endl;
 	}
+
+	SDL_RenderCopy(rend, text, NULL, &rect);
 
 	if (inBounds && mbPressed)
 	{
