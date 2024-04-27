@@ -39,7 +39,6 @@ public:
 	
 	Pokemon(std::list<char> serialized)
 	{
-		deserialize();
 	}
 	
 	Pokemon(std::string file)
@@ -138,7 +137,7 @@ public:
 		numbers.erase();
 		num << _maxHealth;
 		numbers = num.str();
-		std::cout << numbers << std::endl;
+		//std::cout << numbers << std::endl;
 		for (char c : numbers)
 			temp.push_back(c);
 
@@ -148,7 +147,7 @@ public:
 		numbers.erase();
 		num << _currentHealth;
 		numbers = num.str();
-		std::cout << numbers << std::endl;
+		//std::cout << numbers << std::endl;
 		for (char c : numbers)
 			temp.push_back(c);
 
@@ -158,7 +157,7 @@ public:
 		numbers.erase();
 		num << _speed;
 		numbers = num.str();
-		std::cout << numbers << std::endl;
+		//std::cout << numbers << std::endl;
 		for (char c : numbers)
 			temp.push_back(c);
 
@@ -174,7 +173,7 @@ public:
 			numbers.erase();
 			num << atk.getDamage();
 			numbers = num.str();
-			std::cout << numbers << std::endl;
+			//std::cout << numbers << std::endl;
 			for (char c : numbers)
 				temp.push_back(c);
 		}
@@ -182,8 +181,28 @@ public:
 		return temp;
 	}
 
-	void deserialize()
+	std::list<std::string> split(const std::string& str) {
+		std::list<std::string> temp;
+		std::istringstream iss(str);
+		std::string token;
+
+		while (std::getline(iss, token, ':')) {
+			temp.push_back(token);
+		}
+
+		return temp;
+	}
+
+	void deserialize(std::string ser)
 	{
+		int count = 0;
+		std::list<std::string> holder = split(ser);
+		
+		for (std::string st : holder)
+		{
+			std::cout << st << std::endl;
+		}
+
 
 	}
 

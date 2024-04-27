@@ -55,10 +55,7 @@ public:
         }
     }
 
-#pragma region Serialize/Deserialize
 
-
-#pragma endregion
 
 #pragma endregion
 
@@ -87,6 +84,7 @@ public:
 
         }
     }
+
 #pragma endregion
 
 #pragma region console output
@@ -258,16 +256,13 @@ public:
     }
 
 
-    void chooseParty()
-    {
-        system("cls");
-    }
 
     void checkPC()
     {
         system("cls");
         std::cin.clear();
         std::cin.ignore(9999, '\n');
+        int i = 0;
         updatePc();
         bool done = false, adding = false;
         std::list<Pokemon>::iterator it;
@@ -298,7 +293,6 @@ public:
                 }
                 break;
             case 3:
-                int i = 0;
                 adding = true;
                 while (adding)
                 {
