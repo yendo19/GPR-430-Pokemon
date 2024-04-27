@@ -161,15 +161,10 @@ int main()
 	
 
 
-	for (int i = 0; i < 3; i++)
-	{
-		myInv.getPokemonInPartyAt(i).coutData();
-	}
-
+	myInv.Update();
 
 	system("pause");
 
-	//myInv.Update();
 
 
 	setupSDL();

@@ -316,10 +316,22 @@ public:
                         break;
                     case 3:
                         _myPokemon[i] = *it;
+                        system("cls");
                         _myPokemon[i].coutData();
+                        std::cout << "\n\n\n Pokemon Added to Party!\n";
+                        system("pause");
+                        adding = false;
+                        i = 0;
+                        temp = 0;
+                        curr = 0;
+                        it = PC.begin();
                         break;
                     case 4:
                         adding = false;
+                        i = 0;
+                        temp = 0;
+                        curr = 0;
+                        it = PC.begin();
                         break;
                     default:
                         std::cin.clear();
