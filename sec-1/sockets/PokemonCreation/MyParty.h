@@ -73,7 +73,7 @@ public:
             Pokemon temp(fileDir);
             temp.readFiles(file, fileDir);
             PC.push_back(temp);
-            temp.coutData();
+            // temp.coutData();
             if (!added)
                 setParty(temp);
         }
@@ -101,10 +101,9 @@ public:
         std::cout << "| | | (_) |   <  __/ | | | | | (_) | | | | | |_\\ \\  __/ | | |  __/ | | (_| | || (_) | |    \n";
         std::cout << " \\|  \\___/|_|\\_\\___|_| |_| |_|\\___/|_| |_|  \\____/\\___|_| |_|\\___|_|  \\__,_|\\__\\___/|_| \n";
         std::cout << " \n\n 1. Create new Pokemon\n";
-        std::cout << " 2. Choose Party\n";
-        std::cout << " 3. Check PC\n";
-        std::cout << " 4. Go Fight!\n";
-        std::cout << " 5. Exit\n";
+        std::cout << " 2. Check PC\n";
+        std::cout << " 3. Go Fight!\n";
+        std::cout << " 4. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> i; 
 
@@ -114,14 +113,11 @@ public:
             pokemonCreation();
             break;
         case 2:
-            chooseParty();
-            break;
-        case 3:
             checkPC();
             break;
-        case 4:
+        case 3:
             return;
-        case 5:
+        case 4:
             exit(1);
         default:
             std::cin.clear();
@@ -249,6 +245,7 @@ public:
             temp.CreateFiles();
             std::cout << "\n\n POKEMON CREATED!" << std::endl;
             system("pause");
+            updatePc();
             Update();
         }
         else
@@ -269,6 +266,86 @@ public:
     void checkPC()
     {
         system("cls");
+        std::cin.clear();
+        std::cin.ignore(9999, '\n');
+        updatePc();
+        bool done = false, adding = false;
+        std::list<Pokemon>::iterator it;
+        int temp;
+        it = PC.begin();
+        int curr = 0;
+
+        while (!done)
+        {
+            system("cls");
+            it->coutData();
+            std::cout << "\n\n\n 1 to go to Next, 2 to Go Back, 3 to Add to Party, 4 to Exit: ";
+            std::cin >> temp;
+            switch (temp)
+            {
+            case 1:
+                if (curr + 1 <= PC.size())
+                {
+                    curr++;
+                    it++;
+                }
+                break;
+            case 2:
+                if (curr != 0)
+                {
+                    it--;
+                    curr--;
+                }
+                break;
+            case 3:
+                int i = 0;
+                adding = true;
+                while (adding)
+                {
+                    system("cls");
+                    std::cin.clear();
+                    std::cin.ignore(9999, '\n');
+                    _myPokemon[i].coutData();
+                    std::cout << "\n\n\n 1 to go to Next, 2 to Go Back, 3 replace current pokemon with new pokemon, 4 to Exit: ";
+                    std::cin >> temp;
+                    switch (temp)
+                    {
+                    case 1:
+                        if (i+1 <= 2)
+                        {
+                            i++;
+                        }
+                        break;
+                    case 2:
+                        if (i - 1 >= 0)
+                            i--;
+                        break;
+                    case 3:
+                        _myPokemon[i] = *it;
+                        _myPokemon[i].coutData();
+                        break;
+                    case 4:
+                        adding = false;
+                        break;
+                    default:
+                        std::cin.clear();
+                        std::cin.ignore(9999, '\n');
+                        break;
+                    }
+                }
+                break;
+            case 4:
+                done = true;
+                Update();
+                break;
+            default:
+                std::cin.clear();
+                std::cin.ignore(9999, '\n');
+                break;
+            }
+        }
+
+
     }
 
 
