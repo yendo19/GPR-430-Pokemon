@@ -93,16 +93,26 @@ void pickAttack(std::string data)
 int main()
 {
 	std::string filePath = getCurrentLocation();
-	filePath += "/PokemonCreation";
-
+	filePath += "\\PokemonCreation";
+	//std::cout << filePath;
+	std::list<Pokemon> temp;
 	myParty myInv = myParty();
 	myInv.Init(filePath);
 	myInv.CreateFolder();
 	myInv.updatePc();
-	myInv.Update();
+	
 
-	//myInv.updatePc();
-	//myInv.readPC();
+
+	for (int i = 0; i < 3; i++)
+	{
+		myInv.getPokemonInPartyAt(i).coutData();
+	}
+
+
+	system("pause");
+
+	//myInv.Update();
+
 
 	setupSDL();
 

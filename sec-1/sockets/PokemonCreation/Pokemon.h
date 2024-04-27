@@ -17,6 +17,11 @@
 class Pokemon
 {
 public:
+	Pokemon()
+	{
+
+	}
+
 	Pokemon(std::string name, int hp, int speed , attacks atks[4], std::string file)
 	{
 		_name = name;
@@ -77,9 +82,10 @@ public:
 		}
 	}
 
-	void readFiles(std::string fileName)
+	void readFiles(std::string fileName, std::string dir)
 	{
-		std::ifstream file(fileDir + "\\Pokemans\\" + fileName);
+		std::ifstream file(dir + "\\Pokemans\\" + fileName);
+		std::cout << dir + "\\Pokemans\\" + fileName << std::endl;
 		if (file.is_open())
 		{
 			std::string temp;

@@ -22,7 +22,7 @@ public:
     //dumb shit lmao
     void Init(std::string file)
     {
-        std::cout << "init" << std::endl;
+        //std::cout << "init" << std::endl;
         fileDir = file;
     }
 
@@ -32,7 +32,7 @@ public:
     bool CreateFolder()
     {
         namespace fs = std::filesystem;
-        fs::path p(fileDir + "/Pokemans");
+        fs::path p(fileDir + "\\Pokemans");
         if (!fs::exists(p)) {
             return fs::create_directory(p);
         }
@@ -42,7 +42,7 @@ public:
     void getFileNames()
     {
         namespace fs = std::filesystem;
-        fs::path path(fileDir + "/Pokemans");
+        fs::path path(fileDir + "\\Pokemans");
         if (fs::exists(path) && fs::is_directory(path))
         {
             for (const auto& entry : fs::directory_iterator(path))
@@ -66,15 +66,16 @@ public:
     //im gonna die
     void updatePc()
     {
-        /*holder*/ bool i = false;
+        bool added = false;
         getFileNames();
         for each (std::string file in fileNames)
         {
-            if (!i)
-                setParty(file);
             Pokemon temp(fileDir);
-            temp.readFiles(file);
+            temp.readFiles(file, fileDir);
             PC.push_back(temp);
+            temp.coutData();
+            if (!added)
+                setParty(temp);
         }
     }
 
@@ -83,11 +84,7 @@ public:
     {
         for each (Pokemon poke in PC)
         {
-           // poke.coutData();
-            std::list<char> holder;
-            holder = poke.serialize();
-            for (char c : holder)
-                std::cout << c;
+
         }
     }
 #pragma endregion
@@ -284,17 +281,29 @@ public:
     }
 
     /*Placeholder for now*/
-    void setParty(std::string dir)
+    void setParty(Pokemon temp)
     {
-        for (Pokemon pkm : _myPokemon)
-        {
-            pkm.readFiles(dir);
-        }
+        _myPokemon[0] = temp;
+        _myPokemon[1] = temp;
+        _myPokemon[2] = temp;
     }
 
+    
+    std::list<Pokemon> getParty()
+    {
+        std::list<Pokemon> temp;
+        for (Pokemon pkm : _myPokemon)
+            temp.push_back(pkm);
+        return temp;
+    }
+
+    Pokemon getPokemonInPartyAt(int i)
+    {
+        return _myPokemon[i];
+    }
 
 private:
-	Pokemon _myPokemon[3];
+    Pokemon _myPokemon[3];
 	std::list<Pokemon> PC;
     std::list<std::string> fileNames;
 	std::string fileDir;
