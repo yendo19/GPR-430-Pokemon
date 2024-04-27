@@ -54,6 +54,7 @@ public:
 #pragma region Data Accessors
 	std::string getName() { return _name; }
 	int getHealth() { return _currentHealth; }
+	int getSpeed() { return _speed; }
 	int getMaxHealth() { return _maxHealth; }
 	attacks getAttackAt(int i) { return _myAttacks[i]; }
 #pragma endregion
