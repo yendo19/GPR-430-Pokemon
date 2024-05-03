@@ -1,5 +1,18 @@
 #include "poke_server.h"
 
+// Source: https://stackoverflow.com/a/46931770
+std::vector<std::string> split(const std::string& s, char delim) {
+	std::vector<std::string> result;
+	std::stringstream ss(s);
+	std::string item;
+
+	while (getline(ss, item, delim)) {
+		result.push_back(item);
+	}
+
+	return result;
+}
+
 PokemonServer::PokemonServer(const char* host, int port)
 {
 	std::cout << "Initializing server.\n";
@@ -75,13 +88,30 @@ void PokemonServer::update(float dt, int frame_num)
 
 		std::string recv_str(buffer, nbytes_recvd);
 		std::cout << "Server: Received from client: " << recv_str << "\n";
+		processPacket(recv_str);
 	}
 
 	// debug send some msg to client
 	sendToAllClients("Hi clients!");
+}
 
-	// see what the msg was appended with to figure out what function
-	// to cal on gamemanager
+void PokemonServer::processPacket(std::string msg)
+{
+	bool is_valid = true;
+	// split string by spaces
+	std::vector<std::string> values = split(msg, ' ');
+
+	// should have at least 2 values (LIST and one number)
+	if (values.size() <= 1) { is_valid = false; }
+
+	// first value should be SENDER ID
+	int senderId = std::stoi(values[0]);
+	
+	// second value should be the HEADER
+	if (values[1].compare("BATTLEEVENT"))
+	{
+		// do somethign....
+	}
 }
 
 void PokemonServer::sendToAllClients(const char* data)
