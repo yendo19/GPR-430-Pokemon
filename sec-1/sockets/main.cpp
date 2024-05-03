@@ -30,10 +30,21 @@ int main(int argc, char* argv[])
 	atexit(SockLibShutdown);
 
 	GameManager gm = GameManager::GetGameManager();
+	PokemonServer* server = nullptr;
 
-	////if (argc > 1) {
-	//	return run_server();
-	//}
+	if (argc > 1) {
+		// HOST ===========================
+		// create the server
+		server = new PokemonServer("127.0.0.1", 69420);
+		gm.setServer(server);
+	}
+
+	// create the client to connect to the server
+	PokemonClient client = PokemonClient("127.0.0.1", 69420);
+	gm.setClient(&client);
+
+	if(server != nullptr)
+		server->acceptConnections();
 
 	// Initialize the system
 	float last_frame = now();
@@ -41,18 +52,6 @@ int main(int argc, char* argv[])
 	int frame_num = 0;
 	// One second per frame -- wow, that's slow!
 	const float targetDt = 1 / 60.0f;
-
-
-	// HOST ===========================
-	// create the server
-	PokemonServer server = PokemonServer("127.0.0.1", 69420);
-	gm.setServer(&server);
-	
-	// create the client to connect to the server
-	PokemonClient client = PokemonClient("127.0.0.1", 69420);
-	gm.setClient(&client);
-
-	server.acceptConnections();
 
 	// initialize UI
 	UiManager ui = UiManager();

@@ -9,6 +9,7 @@
 
 PokemonClient::PokemonClient(const char* host, int port)
 {
+	std::cout << "Initializing client.\n";
 	initParty();
 
 	*message_buffer = { 0 };
@@ -20,7 +21,7 @@ PokemonClient::PokemonClient(const char* host, int port)
 	connected_sock->Connect(addr);
 	connected_sock->SetNonBlockingMode(true);
 
-	std::cout << "Connected to server!\n";
+	std::cout << "Client: Connected to server!\n";
 }
 
 void PokemonClient::initParty()

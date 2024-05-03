@@ -17,10 +17,9 @@ class PokemonServer {
 
 private:
 	Socket* listen_sock;
-	Socket* conn_sock;
+	std::vector<Socket*> connection_sockets;
 
 	std::thread t1;
-	bool connection_alive;
 
 public:
 	/// <summary>
@@ -36,6 +35,7 @@ public:
 
 	void update(float dt, int frame_num);
 	void acceptConnections();
+	void acceptConnection();
 	void sendToClients(const char* data);
 };
 #pragma endregion

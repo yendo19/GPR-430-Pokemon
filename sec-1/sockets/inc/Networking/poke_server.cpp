@@ -2,21 +2,36 @@
 
 PokemonServer::PokemonServer(const char* host, int port)
 {
+	std::cout << "Initializing server.\n";
 	// TCP Server: Must pick STREAM for Type
 	listen_sock = new Socket(Socket::Family::INET, Socket::Type::STREAM);
 	listen_sock->Bind(Address(host, port));
 	listen_sock->Listen();
-	listen_sock->SetNonBlockingMode(true);
+	//listen_sock->SetNonBlockingMode(true);
 }
 
 void PokemonServer::acceptConnections()
 {
+	//std::thread player1(&PokemonServer::acceptConnection, this);
+	//std::thread player2(&PokemonServer::acceptConnection, this);
+	for (int i = 0; i < 2; ++i)
+	{
+		acceptConnection();
+	}
+}
+
+void PokemonServer::acceptConnection()
+{
 	std::cout << "Server: Waiting for connection...\n";
-	conn_sock = new Socket(std::move(listen_sock->Accept()));
+	Socket* conn_sock = new Socket(std::move(listen_sock->Accept()));
 	std::cout << "Server: Got connection.\n";
 	conn_sock->SetTimeout(.1);
-	connection_alive = true;
+	connection_sockets.push_back(conn_sock);
+
+	// track the player that just joined
+	//....
 }
+
 
 PokemonServer::~PokemonServer()
 {
@@ -26,7 +41,8 @@ PokemonServer::~PokemonServer()
 
 void PokemonServer::update(float dt, int frame_num)
 {
-	while (connection_alive) {
+	for each (Socket* conn_sock in connection_sockets)
+	{
 		char buffer[4096];
 
 		//std::cout << "Server: Connection live, processing packets\n";
@@ -36,7 +52,6 @@ void PokemonServer::update(float dt, int frame_num)
 			if (error == Socket::SOCKLIB_ETIMEDOUT)
 			{
 				std::cout << "Server: Client timed out." << "\n";
-				connection_alive = false; // Stop handling this connection and move on to a new connection.
 				break;
 			}
 			else if (error == Socket::SOCKLIB_EWOULDBLOCK) {
@@ -53,7 +68,6 @@ void PokemonServer::update(float dt, int frame_num)
 		else if (nbytes_recvd == 0)
 		{
 			std::cout << "Server: Nothing received. Connection no longer alive.\n";
-			connection_alive = false; // Stop handling this connection and move on to a new connection.
 			return;
 		}
 
@@ -71,5 +85,8 @@ void PokemonServer::update(float dt, int frame_num)
 void PokemonServer::sendToClients(const char* data)
 {
 	std::cout << "Server: Sending packet to clients: " << data << "\n";
-	conn_sock->Send(data, std::strlen(data));
+	for each (Socket * conn_sock in connection_sockets)
+	{
+		conn_sock->Send(data, std::strlen(data));
+	}
 }
