@@ -11,7 +11,7 @@ private:
 
 	char message_buffer[4096];
 	myParty party;
-	std::string to_display;
+
 public:
 
 	PokemonClient(const char* host, int port);
@@ -26,6 +26,7 @@ public:
 	}
 
 	void sendToServer(const char* data);
+	std::string receivePacket();
 };
 #pragma endregion
 

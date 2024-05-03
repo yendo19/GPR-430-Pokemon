@@ -16,6 +16,7 @@
 class PokemonServer {
 
 private:
+	int connections;
 	Socket* listen_sock;
 	std::vector<Socket*> connection_sockets;
 
@@ -37,6 +38,6 @@ public:
 	void acceptConnections();
 	void acceptConnection();
 	void sendToClient(int client_id, const char* data);
-	void sendToClients(const char* data);
+	void sendToAllClients(const char* data);
 };
 #pragma endregion

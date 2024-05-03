@@ -8,6 +8,7 @@ PokemonServer::PokemonServer(const char* host, int port)
 	listen_sock->Bind(Address(host, port));
 	listen_sock->Listen();
 	//listen_sock->SetNonBlockingMode(true);
+	connections = 0;
 }
 
 void PokemonServer::acceptConnections()
@@ -29,7 +30,8 @@ void PokemonServer::acceptConnection()
 	connection_sockets.push_back(conn_sock);
 
 	// track the player that just joined
-	
+	//sendToClient(connections, "YOURID " + connections);
+	connections++;
 }
 
 
@@ -76,22 +78,23 @@ void PokemonServer::update(float dt, int frame_num)
 	}
 
 	// debug send some msg to client
-	sendToClients("Hi clients!");
+	sendToAllClients("Hi clients!");
 
 	// see what the msg was appended with to figure out what function
 	// to cal on gamemanager
 }
 
-void PokemonServer::sendToClients(const char* data)
+void PokemonServer::sendToAllClients(const char* data)
 {
 	std::cout << "Server: Sending packet to clients: " << data << "\n";
-	for each (Socket * conn_sock in connection_sockets)
+	for (int i = 0; i < connection_sockets.size(); ++i)
 	{
-		conn_sock->Send(data, std::strlen(data));
+		connection_sockets[i]->Send(data, std::strlen(data));
 	}
 }
 
 void PokemonServer::sendToClient(int client_id, const char* data)
 {
-
+	std::cout << "Server: Sending packet to client " << client_id << ": " << data << "\n";
+	connection_sockets[client_id]->Send(data, std::strlen(data));
 }

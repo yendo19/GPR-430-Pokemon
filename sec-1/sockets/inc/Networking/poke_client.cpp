@@ -48,6 +48,18 @@ void PokemonClient::update(float dt, int frame_num)
 {
 	sendToServer("Hi server!");
 
+	std::string msg = receivePacket();
+
+	if(msg.length() > 0)
+		std::cout << "Client: Received from server: " << msg << "\n";
+
+	// parse the header of the packet
+}
+
+std::string PokemonClient::receivePacket()
+{
+	std::string to_display = "";
+
 	// Did anyone send anything back to us?
 	int nbytes_recvd = connected_sock->Recv(message_buffer, sizeof(message_buffer));
 	if (nbytes_recvd == -1) {
@@ -56,20 +68,19 @@ void PokemonClient::update(float dt, int frame_num)
 		}
 		else {
 			std::cerr << "Client: Unexpected error!\n";
-			return;
+			return to_display;
 		}
 	}
 	else if (nbytes_recvd == 0) {
 		std::cerr << "Client: Connection unexpectedly closed!\n";
-		return;
+		return to_display;
 	}
 	else {
 
 		// PROCESS WHAT MSG WE GOT BACK
 		to_display = std::string(message_buffer, nbytes_recvd);
 	}
-
-	std::cout << "Client: Received from server: " << to_display << "\n";
+	return to_display;
 }
 
 void PokemonClient::sendToServer(const char* data)

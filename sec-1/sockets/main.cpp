@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	GameManager gm = GameManager::GetGameManager();
 	PokemonServer* server = nullptr;
 
-	if (argc > 1) {
+	if (argc == 1) {
 		// HOST ===========================
 		// create the server
 		server = new PokemonServer("127.0.0.1", 69420);
@@ -57,8 +57,10 @@ int main(int argc, char* argv[])
 	const float targetDt = 1 / 60.0f;
 
 	// initialize UI
+	/*
 	UiManager ui = UiManager();
 
+	
 	ui.initSprites();
 
 	std::vector<int> spriteIndexes(16);
@@ -77,11 +79,11 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-
+	
 	// init attack UI
 	std::list<Button> attacks;
 	ui.setupActive(&attacks, client.getParty().getPokemonInPartyAt(0));
-
+	*/
 
 	//GAME LOOP
 	bool running = true;
@@ -95,7 +97,7 @@ int main(int argc, char* argv[])
 		frame_num++;
 
 		// update UI every frame
-		running = ui.update(&attacks, dt); // will return false if player gives signal to quit
+		//running = ui.update(&attacks, dt); // will return false if player gives signal to quit
 
 
 		// only update client and server every other frame
