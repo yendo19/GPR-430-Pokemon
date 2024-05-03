@@ -63,6 +63,7 @@ GameManager::GameManager()
 	current_round = 0;
 	event_queue = std::vector<BattleEvent>();
 	deltaTime = 0;
+	recved_events_from_this_phase = std::vector<int>();
 }
 
 GameManager::~GameManager()
@@ -86,7 +87,7 @@ void GameManager::update(float dt, int frame_num)
 		// wait for all clients to send attack events to the server...
 
 		// once we have 2 events queued, it's time to move to processing events
-		if (event_queue.size() == 2)
+		if (event_queue.size() >= 2)
 		{
 			std::cout << "Server: All players have sent their attacks. Broadcasting attacks and changing to DISPLAY_ATTACKS.\n";
 			// broadcast the changes to the clients
@@ -175,14 +176,24 @@ void GameManager::sendEventToServer(BattleEvent battleEvent)
 // this should be called whenever the server receives an event
 void GameManager::queueEvent(const char* serializedBattleEvent)
 {
-	std::cout << "Server: Queueing event: " << serializeBattleEvent << '\n';
 	BattleEvent battleEvent = deserializeBattleEvent(serializedBattleEvent);
-	event_queue.push_back(battleEvent);
+	//if we've already received an event from this player, skip it
+	if (std::find(recved_events_from_this_phase.begin(), recved_events_from_this_phase.end(), battleEvent.client_id) != recved_events_from_this_phase.end()) {
+		/* v contains x */
+		return;
+	}
+	else {
+		/* v does not contain x */
+		std::cout << "Server: Queueing event from client: " << battleEvent.client_id << " using attack " << battleEvent.attackIndex << '\n';
+		event_queue.push_back(battleEvent);
+		recved_events_from_this_phase.push_back(battleEvent.client_id);
+	}
 }
 
 // CALLED BY SERVER
 void GameManager::broadcastEventsToClients()
 {
+	recved_events_from_this_phase.clear();
 
 	for (BattleEvent move : event_queue)
 	{

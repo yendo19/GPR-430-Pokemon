@@ -28,6 +28,8 @@ private:
 	bool isServer;
 
 	float deltaTime;
+
+	std::vector<int> recved_events_from_this_phase;
 public:
 
 	GameManager();

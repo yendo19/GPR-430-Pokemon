@@ -34,14 +34,12 @@ void PokemonServer::acceptConnection()
 	//std::cout << "Server: Waiting for connection...\n";
 	Socket* conn_sock = new Socket(std::move(listen_sock->Accept()));
 	std::cout << "Server: Got connection.\n";
-	conn_sock->SetTimeout(.1);
+	conn_sock->SetTimeout(1.0f);
 	connection_sockets.push_back(conn_sock);
 
 	// track the player that just joined
 	sendToClient(connections, std::string("YOURID " + std::to_string(connections)).data());
 	connections++;
-
-
 }
 
 
@@ -155,7 +153,7 @@ void PokemonServer::sendToAllClients(std::string data)
 
 void PokemonServer::sendToClient(int client_id, std::string data)
 {
-	//std::cout << "Server: Sending packet to client " << client_id << ": " << data << "\n";
+	std::cout << "Server: Sending packet to client " << client_id << ": " << data << "\n";
 	data = "@" + data;
 	connection_sockets[client_id]->Send(data.c_str(), data.length());
 }

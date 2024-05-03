@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 		}
 
 		// only update client and server every second
-		if (frame_num % 60 != 0) continue;
+		if (frame_num % 2 != 0) continue;
 
 		GameManager::GetGameManager().update(dt, frame_num);
 		last_frame = time;

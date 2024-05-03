@@ -194,7 +194,7 @@ std::string PokemonClient::receivePacket()
 
 void PokemonClient::sendToServer(std::string data)
 {
-	//std::cout << "Client: Sending packet to server: " << data << "\n";
+	std::cout << "Client: Sending packet to server: " << data << "\n";
 	data = "@" + data;
 	connected_sock->Send(data.c_str(), data.length());
 }
