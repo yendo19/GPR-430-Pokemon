@@ -28,6 +28,6 @@ public:
 
 	~PokemonServer();
 
-	int run_server();
+	int update();
 };
 #pragma endregion

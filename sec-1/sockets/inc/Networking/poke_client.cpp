@@ -11,9 +11,16 @@ PokemonClient::PokemonClient(const char* host, int port)
 {
 	initParty();
 
-	//address = Address(host, port);
+	*message_buffer = { 0 };
+	
+	SockLibInit();
 	// init our socket
-	//start_client();
+	Address addr(host, port);
+	connected_sock = new Socket(Socket::Family::INET, Socket::Type::STREAM);
+	connected_sock->Connect(addr);
+	connected_sock->SetNonBlockingMode(true);
+
+	std::cout << "Connected to server!\n";
 }
 
 void PokemonClient::initParty()
@@ -30,48 +37,13 @@ void PokemonClient::initParty()
 	party.Update();
 }
 
-void PokemonClient::start_client()
-{
-	connected_sock->Create(Socket::Family::INET, Socket::Type::STREAM);
-	connected_sock->Connect(address);
-	connected_sock->SetNonBlockingMode(true);
-
-	std::cout << "Connected to server!\n";
-}
-
 PokemonClient::~PokemonClient()
 {
-	//delete connected_sock;
-	//connected_sock = NULL;
+	SockLibShutdown();
+	// socket cleans up itself I think?
 }
 
-
-// PLACEHOLDER "UPDATE" - NEEDS TO BE REMOVED
-std::string PokemonClient::do_client()
-{
-
-	// send data (this is the same interface as file.write();
-	// Create a string to send to the server using the build_string() function
-	std::string msg_to_send = "some string";
-	size_t nbytes_sent = connected_sock->Send(msg_to_send.data(), msg_to_send.size());
-
-	std::cout << "Sent " << nbytes_sent << "bytes to server" << "\n";
-
-	// let's see if Scott's server has anything to say back to us..
-	// Recv = Receive
-	// Recv is a blocking operation (it waits for data to come back to it)
-	char buffer[4096];
-	size_t nbytes_recved = connected_sock->Recv(buffer, sizeof(buffer));
-
-	// Now, buffer has nbytes_recved written into it
-	std::string msg_recved(buffer, nbytes_recved);
-	std::cout << "Server says '" << msg_recved << "'\n";
-
-	// return server's response
-	return msg_recved;
-}
-
-void PokemonClient::Update(float dt, int frame_num) {
+void PokemonClient::update(float dt, int frame_num) {
 
 	// Don't need to update this module _every_ frame...
 	// Every other frame is plenty.

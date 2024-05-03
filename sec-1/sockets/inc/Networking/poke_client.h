@@ -8,7 +8,6 @@ class PokemonClient
 {
 private:
 	Socket* connected_sock;
-	Address address;
 
 	char message_buffer[4096];
 	myParty party;
@@ -19,10 +18,7 @@ public:
 	~PokemonClient();
 
 	void initParty();
-
-	void start_client();
-	std::string do_client(); // to be removed
-	void Update(float dt, int frame_num);
+	void update(float dt, int frame_num);
 	
 	myParty getParty()
 	{

@@ -4,10 +4,7 @@ PokemonServer::PokemonServer(const char* host, int port)
 {
 	// TCP Server: Must pick STREAM for Type
 	listen_sock = new Socket(Socket::Family::INET, Socket::Type::STREAM);
-
-	// Next: Bind to an address
-	Address srv_addr(host, port);
-	listen_sock->Bind(srv_addr);
+	listen_sock->Bind(Address(host, port));
 	listen_sock->Listen();
 }
 
@@ -17,7 +14,7 @@ PokemonServer::~PokemonServer()
 	listen_sock = NULL;
 }
 
-int PokemonServer::run_server() {
+int PokemonServer::update() {
 	// Simple demo to demonstrate serialization
 	// over TCP
 	// Create a socket, wait for folks to connect

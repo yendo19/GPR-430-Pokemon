@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
 	// HOST ===========================
 	// create the server
-	//PokemonServer server = PokemonServer("127.0.0.1", 69420);
+	PokemonServer server = PokemonServer("127.0.0.1", 69420);
 	
 
 	// create the client to connect to the server
@@ -72,11 +72,10 @@ int main(int argc, char* argv[])
 		running = ui.update(&attacks); // will return false if player gives signal to quit
 
 		// update the server
-		//server.run_server();
+		server.update();
 
 		// update the client
-		//client.Update(dt, frame_num);
-		//client.do_client();
+		client.update(dt, frame_num);
 	}
 
 	return 0;
