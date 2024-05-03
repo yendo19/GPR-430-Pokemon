@@ -65,6 +65,8 @@ public:
 	// when they receive the packet for a pokemon to update
 	void updateEntry(int ownerId,int pokemonIndex,char* serializedPokemon);
 
+	int checkLoss();
+
 	static GameManager & GetGameManager() {
 		static GameManager gm;
 		return gm;
@@ -86,16 +88,17 @@ public:
 		
 		// ask clients to choose attacks
 
-
 		// wait for the clients to send attack events to the server
-
-
+		// 
 		// once we have 2 events queued, it's time to move to processing events
 
 		// broadcast the changes to the clients
-
+		broadcastEventsToClients();
 		// check if anybody has won/lost
-
+		if (int i = checkLoss() != -1)
+		{
+			//index at i lost
+		}
 
 	}
 

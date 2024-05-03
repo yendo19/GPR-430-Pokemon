@@ -52,6 +52,7 @@ void GameManager::evaluateRound()
 				if (120 - p.party[p.leader].getAttackAt(move.attackIndex).getDamage() > std::rand() % 100)
 				{
 					attacked->party[attacked->leader].applyDamage(p.party[p.leader].getAttackAt(move.attackIndex).getDamage());
+					updateEntry(attacked->client_id, attacked->leader, attacked->party[attacked->leader].serialize());
 				}
 			}
 		}
@@ -67,6 +68,19 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+}
+
+int GameManager::checkLoss()
+{
+	for each (Player play in connected_players)
+	{
+		for each (Pokemon pkm in play.party)
+		{
+			if (pkm.getHealth() <= 0)
+				return play.client_id;
+		}
+	}
+	return -1;
 }
 
 void GameManager::acceptAttackInput(BattleEvent battleEvent)
@@ -88,7 +102,7 @@ void GameManager::sendEventToServer(BattleEvent battleEvent)
 	char* data = serializeBattleEvent(battleEvent);
 
 	// sends the packet to the server
-	// ........
+	local_client->sendToServer(data);
 }
 
 // CALLED BY SERVER
@@ -102,16 +116,7 @@ void GameManager::queueEvent(char* serializedBattleEvent)
 // CALLED BY SERVER
 void GameManager::broadcastEventsToClients()
 {
-	// process all events that are queued (this happens at the end of each round)
-	for each (BattleEvent btev in event_queue)
-	{
-		// determine the new health of target pokemon
-		getPlayerAtIndex(btev.client_id)->party[getPlayerAtIndex(btev.client_id)->leader].applyDamage(getOtherPlayer(btev.client_id)->party[getOtherPlayer(btev.client_id)->leader].getAttackAt(btev.attackIndex).getDamage());
-		// send packet to client notifying of the new pokemon states
-		
-		//getPlayerAtIndex(btev.client_id)->party[getPlayerAtIndex(btev.client_id)->leader].serialize();
-		//getOtherPlayer(btev.client_id)->party[getOtherPlayer(btev.client_id)->leader].serialize();
-	}
+	evaluateRound();
 }
 
 // CALLED BY CLIENTS
