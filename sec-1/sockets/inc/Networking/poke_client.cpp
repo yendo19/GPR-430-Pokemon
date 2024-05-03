@@ -53,12 +53,11 @@ void PokemonClient::update(float dt, int frame_num)
 
 	if (msg.length() > 0)
 	{
-		
-
 		std::vector<std::string> packets = split(msg, '@');
 		for (int i = 0; i < packets.size(); i++)
 		{
 			std::string packet = packets[i];
+			if (packet.length() == 0) continue;
 			std::cout << "Client: Received from server: " << packet << "\n";
 			// PROCESS WHAT MSG WE GOT BACK
 			processPacket(packet);

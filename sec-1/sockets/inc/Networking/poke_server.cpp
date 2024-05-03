@@ -85,16 +85,19 @@ void PokemonServer::update(float dt, int frame_num)
 
 		std::string recv_str(buffer, nbytes_recvd);
 		
-
-		std::vector<std::string> packets = split(recv_str, '@');
-		for (int i = 0; i < packets.size(); i++)
+		if (recv_str.length() > 0)
 		{
-			std::string packet = packets[i];
-			std::cout << "Server: Received from client: " << packet << "\n";
-			// PROCESS WHAT MSG WE GOT
-			processPacket(packet);
+			std::vector<std::string> packets = split(recv_str, '@');
+
+			for (int i = 0; i < packets.size(); i++)
+			{
+				std::string packet = packets[i];
+				if (packet.length() == 0) continue;
+				std::cout << "Server: Received from client: " << packet << "\n";
+				// PROCESS WHAT MSG WE GOT
+				processPacket(packet);
+			}
 		}
-		
 	}
 }
 
