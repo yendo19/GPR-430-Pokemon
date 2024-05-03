@@ -16,7 +16,7 @@ file(
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
 
 install(FILES ${POKE_INC} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Pokeman)
-add_executable(Pokeman main.cpp socklib_generic.cpp ${POKE_SRC} ${POKE_INC})
+add_executable(Pokeman main.cpp socklib_generic.cpp ${POKE_SRC} ${POKE_INC} "Networking/server.h" "Networking/client.h" "Networking/server.cpp" "Networking/client.cpp")
 
 target_compile_features(Pokeman PRIVATE cxx_std_17)
 
