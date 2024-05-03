@@ -85,6 +85,10 @@ void PokemonClient::processPacket(std::string msg)
 			std::cout << "Client: Got my ID: " << client_id << "\n";
 
 			// show connected UI....
+			// .......
+
+			std::string outmsg = std::to_string(client_id) + " PARTYSETUP " + party->getPokemonInPartyAt(0).serialize() + " " + party->getPokemonInPartyAt(1).serialize() + " " + party->getPokemonInPartyAt(2).serialize();
+			sendToServer(outmsg.data());
 		}
 		if (values[0] ==("CHANGESTATE"))
 		{
@@ -131,12 +135,6 @@ void PokemonClient::processPacket(std::string msg)
 			}
 		}
 		break;
-
-		
-		client_id = std::stoi(values[1]);
-		std::cout << "Client: Got my ID: " << client_id << "\n";
-		std::string outmsg = std::to_string(client_id) + " PARTYSETUP " + party->getPokemonInPartyAt(0).serialize() + " " + party->getPokemonInPartyAt(1).serialize() + " " + party->getPokemonInPartyAt(2).serialize();
-		sendToServer(outmsg.data());
 		
 	}
 	

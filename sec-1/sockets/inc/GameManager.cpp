@@ -153,6 +153,7 @@ void GameManager::acceptAttackInput(BattleEvent battleEvent)
 void GameManager::trackPlayer(Player player)
 {
 	connected_players.push_back(player);
+	std::cout << "Server: Tracked players: " << connected_players.size() << "\n";
 }
 
 // CALLED BY CLIENT

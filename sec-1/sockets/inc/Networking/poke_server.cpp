@@ -118,17 +118,19 @@ void PokemonServer::processPacket(std::string msg)
 	{
 		// do somethign....
 	}
-	else if (values[1] == ("PARTYSETUP"))
+	
+	if (values[1] == ("PARTYSETUP"))
 	{
 
 		Player p;
 		p.client_id = senderId;
 		p.leader = 0;
 
-		p.party[0].deserialize(values[2], "");
-		p.party[1].deserialize(values[3], "");
-		p.party[2].deserialize(values[4], "");
+		p.party[0] = Pokemon::deserialize(values[2]);
+		p.party[1] = Pokemon::deserialize(values[3]);
+		p.party[2] = Pokemon::deserialize(values[4]);
 
+		std::cout << "Server: Received client " << senderId << "'s party. Tracking player.\n";
 		GameManager::GetGameManager().trackPlayer(p);
 	}
 }
