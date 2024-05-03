@@ -44,7 +44,7 @@ void PokemonServer::acceptConnection()
 	connection_sockets.push_back(conn_sock);
 
 	// track the player that just joined
-	sendToClient(connections, std::string("YOURID " + connections).data());
+	sendToClient(connections, std::string("YOURID " + std::to_string(connections)).data());
 	connections++;
 
 
