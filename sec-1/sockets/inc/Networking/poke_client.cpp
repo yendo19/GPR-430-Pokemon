@@ -1,11 +1,11 @@
 #include "poke_client.h"
-#include "../PokemonCreation/MyParty.h"
+#include "../../PokemonCreation/MyParty.h"
 
-std::string getCurrentLocation() {
-	std::filesystem::path main_cpp_path = __FILE__;
-	std::filesystem::path main_cpp_folder = main_cpp_path.parent_path();
-	return main_cpp_folder.string();
-}
+//std::string getCurrentLocation() {
+//	std::filesystem::path main_cpp_path = __FILE__;
+//	std::filesystem::path main_cpp_folder = main_cpp_path.parent_path();
+//	return main_cpp_folder.string();
+//}
 
 PokemonClient::PokemonClient(const char* host, int port)
 {
@@ -19,16 +19,15 @@ PokemonClient::PokemonClient(const char* host, int port)
 void PokemonClient::initParty()
 {
 	// initialize the party
-	std::string filePath = getCurrentLocation();
-	filePath += "\\..\\PokemonCreation";
+	std::string filePath = "assets";
 	//std::cout << filePath;
 	std::list<Pokemon> temp;
-	myParty myInv = myParty();
-	myInv.Init(filePath);
-	myInv.CreateFolder();
-	myInv.updatePc();
+	party = myParty();
+	party.Init(filePath);
+	party.CreateFolder();
+	party.updatePc();
 
-	myInv.Update();
+	party.Update();
 }
 
 void PokemonClient::start_client()
@@ -42,8 +41,8 @@ void PokemonClient::start_client()
 
 PokemonClient::~PokemonClient()
 {
-	delete connected_sock;
-	connected_sock = NULL;
+	//delete connected_sock;
+	//connected_sock = NULL;
 }
 
 

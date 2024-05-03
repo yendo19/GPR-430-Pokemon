@@ -5,8 +5,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <filesystem>
-#include "../socklib.h"
-#include "../PokemonCreation/MyParty.h"
+#include "../../socklib.h"
+#include "../../PokemonCreation/MyParty.h"
 #include <iostream>
 #include <fstream>
 #include <list>
