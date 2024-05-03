@@ -83,7 +83,8 @@ int main(int argc, char* argv[])
 	bool quit = false;
 	int frame_num = 0;
 	// One second per frame -- wow, that's slow!
-	const float targetDt = 1 / 60.0f;
+	//const float targetDt = 1 / 60.0f;
+	const float targetDt = 1.0f;
 
 	// initialize UI
 	
@@ -124,6 +125,8 @@ int main(int argc, char* argv[])
 			running = ui.update(&attacks, dt); // will return false if player gives signal to quit
 		}
 		*/
+
+		last_frame = time;
 	}
 
 	return 0;

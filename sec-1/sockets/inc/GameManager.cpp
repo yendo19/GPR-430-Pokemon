@@ -91,7 +91,7 @@ void GameManager::update(float dt, int frame_num)
 			// broadcast the changes to the clients
 			broadcastEventsToClients();
 			event_queue.clear(); // clear the queue
-			phaseStartTime = (float)clock() / CLOCKS_PER_SEC;
+			//phaseStartTime = (float)clock() / CLOCKS_PER_SEC;
 
 			setState(State::DISPLAY_ATTACKS);
 			std::string msg = "CHANGESTATE DISPLAY_ATTACKS";
@@ -100,14 +100,15 @@ void GameManager::update(float dt, int frame_num)
 		break;
 	case DISPLAY_ATTACKS:
 		// wait like 10 seconds before changing back to choose attacks
-		deltaTime = ((float)clock() / CLOCKS_PER_SEC) - phaseStartTime;
-
-		if (deltaTime > 10.0f)
-		{
+		//deltaTime = ((float)clock() / CLOCKS_PER_SEC) - phaseStartTime;
+		//std::cout << "Waiting for " << deltaTime << "s \n";
+		//if (deltaTime > 10.0f)
+		//{
 			// tell the servers to choose attacks again
-			std::string msg = "CHANGESTATE CHOOSE_ATTACKS";
-			server->sendToAllClients(msg.c_str());
-		}
+		//	std::string msg = "CHANGESTATE CHOOSE_ATTACKS";
+		//	server->sendToAllClients(msg.c_str());
+		//}
+		std::cout << "CHOOSE ATTACKS SHOULD BE CALLED HERE\n";
 		break;
 	}
 
