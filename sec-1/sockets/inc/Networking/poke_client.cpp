@@ -154,27 +154,15 @@ void PokemonClient::processPacket(std::string msg)
 
 	if (values[0] == "PARTYSETUP")
 	{
+		Player player;
+		player.client_id = 0;
+		player.leader = 0;
 
-		Player p_server;
-		p_server.client_id = 0;
-		p_server.leader = 0;
+		player.party[0] = Pokemon::deserialize(values[1]);
+		player.party[1] = Pokemon::deserialize(values[2]);
+		player.party[2] = Pokemon::deserialize(values[3]);
 
-		p_server.party[0] = Pokemon::deserialize(values[1]);
-		p_server.party[1] = Pokemon::deserialize(values[2]);
-		p_server.party[2] = Pokemon::deserialize(values[3]);
-
-		GameManager::GetGameManager().trackPlayer(p_server);
-
-		Player p_local;
-		p_local.client_id = 1;
-		p_local.leader = 0;
-
-
-		p_local.party[0] = party->getPokemonInPartyAt(0);
-		p_local.party[1] = party->getPokemonInPartyAt(1);
-		p_local.party[2] = party->getPokemonInPartyAt(2);
-
-		GameManager::GetGameManager().trackPlayer(p_local);
+		GameManager::GetGameManager().trackPlayer(player);
 	}
 }
 

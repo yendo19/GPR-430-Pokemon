@@ -134,16 +134,10 @@ void PokemonServer::processPacket(std::string msg)
 		std::cout << "Pokemon 1: " << p.party[0].getName() << '\n';
 		std::cout << "Pokemon 2: " << p.party[1].getName() << '\n';
 		std::cout << "Pokemon 3: " << p.party[2].getName() << '\n';
-		GameManager::GetGameManager().trackPlayer(p);
+		//GameManager::GetGameManager().trackPlayer(p);
 
-		// send our player data back to the client
-		Player local_player = *(GameManager::GetGameManager().getPlayerAtIndex(0));
-		std::string outmsg = "PARTYSETUP " 
-			+ std::string(local_player.party[0].serialize()) + " "
-			+ std::string(local_player.party[1].serialize()) + " "
-			+ std::string(local_player.party[2].serialize());
-		//sendToServer(outmsg.data());
-		sendToClient(1, outmsg);
+		msg = msg.erase(0, 2); // remove the client ID and the space
+		sendToAllClients(msg);
 	}
 }
 

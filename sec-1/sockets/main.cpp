@@ -107,8 +107,9 @@ int main(int argc, char* argv[])
 		if (frame_num % 60 != 0) continue;
 
 
-		std::cout << "==========================\n";
-		std::cout << "Frame " << frame_num << "\n";
+		//std::cout << "==========================\n";
+		//std::cout << "Frame " << frame_num << "\n";
+		std::cout << '\n\n';
 
 		GameManager::GetGameManager().update(dt, frame_num);
 
