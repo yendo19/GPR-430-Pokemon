@@ -23,6 +23,7 @@ private:
 	int _speed;
 	Attack _myAttacks[4];
 	std::string fileDir;
+	int _spriteIndex;
 
 public:
 	Pokemon()
@@ -58,6 +59,12 @@ public:
 		fileDir = file;
 		_speed = 0;
 	}
+
+	void setSprite(int index)
+	{
+		_spriteIndex = index;
+	}
+
 	~Pokemon() {};
 #pragma region Data Accessors
 	std::string getName() { return _name; }
@@ -65,6 +72,7 @@ public:
 	int getSpeed() { return _speed; }
 	int getMaxHealth() { return _maxHealth; }
 	Attack getAttackAt(int i) { return _myAttacks[i]; }
+	int getSprite() { return _spriteIndex; }
 #pragma endregion
 
 	

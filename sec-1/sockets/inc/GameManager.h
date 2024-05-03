@@ -5,13 +5,15 @@
 
 struct BattleEvent
 {
+	int client_id;
 	int attackIndex;
 };
 
 struct Player
 {
 	int client_id;
-	myParty party;
+	int leader;
+	Pokemon party[3];
 };
 
 class GameManager
@@ -25,6 +27,10 @@ private:
 
 	static char* serializeBattleEvent(BattleEvent battleEvent);
 	static BattleEvent deserializeBattleEvent(char* serialized_event);
+
+	void evaluateRound();
+
+	bool isServer;
 
 public:
 
@@ -55,6 +61,10 @@ public:
 		static GameManager gm;
 		return gm;
 	}
+
+	Player getPlayerAtIndex(size_t index);
+
+	bool getIsServer() { return isServer; }
 };
 
 #pragma endregion

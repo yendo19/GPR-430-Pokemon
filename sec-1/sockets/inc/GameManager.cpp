@@ -13,6 +13,24 @@ BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 	return BattleEvent();
 }
 
+void GameManager::evaluateRound()
+{	
+	if (!getIsServer())
+		return;
+	for (BattleEvent move : event_queue)
+	{
+		for (Player p : connected_players)
+		{
+			if (p.client_id != move.client_id)
+			{
+				//connected_players[move.client_id] move.attackIndex
+				//if ()
+				//p.party[p.leader].
+			}
+		}
+	}
+}
+
 GameManager::GameManager()
 {
 }
@@ -70,4 +88,12 @@ void GameManager::updateEntry(int ownerId, char* serializedPokemon)
 	// deserialized the pokemon
 
 	// updates the local copy of the chosen pokemon
+}
+
+Player GameManager::getPlayerAtIndex(size_t index)
+{
+	std::list<Player>::iterator nth = connected_players.begin();
+	std::advance(nth, index);
+
+	return *nth;
 }
