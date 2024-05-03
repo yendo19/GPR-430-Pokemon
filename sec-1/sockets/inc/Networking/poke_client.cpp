@@ -45,9 +45,10 @@ PokemonClient::~PokemonClient()
 
 void PokemonClient::update(float dt, int frame_num) 
 {
+	sendToServer("Hi server!");
+
 	// Did anyone send anything back to us?
 	int nbytes_recvd = connected_sock->Recv(message_buffer, sizeof(message_buffer));
-	std::cout << "Client: Bytes received: " << nbytes_recvd << "\n";
 	if (nbytes_recvd == -1) {
 		if (connected_sock->GetLastError() == Socket::SOCKLIB_EWOULDBLOCK) {
 			to_display = "Client revieved no message this frame.\n";
@@ -67,7 +68,7 @@ void PokemonClient::update(float dt, int frame_num)
 		to_display = std::string(message_buffer, nbytes_recvd);
 	}
 
-	std::cout << to_display << "\n";
+	std::cout << "Client: Received from server: " << to_display << "\n";
 }
 
 void PokemonClient::sendToServer(const char* data)
