@@ -11,8 +11,8 @@
 
 #include "inc/ui.h"
 
-#include "Networking/poke_server.h"
-#include "Networking/poke_client.h"
+#include "inc/Networking/poke_server.h"
+#include "inc/Networking/poke_client.h"
 
 float ticks_to_sec(clock_t ticks) {
 	return (float)ticks / CLOCKS_PER_SEC;
@@ -48,8 +48,6 @@ int main(int argc, char* argv[])
 	// create the client to connect to the server
 	PokemonClient client = PokemonClient("localhost", 69420);
 
-	system("pause");
-
 	// initialize UI
 	UiManager ui = UiManager();
 	ui.setup();
@@ -71,7 +69,7 @@ int main(int argc, char* argv[])
 		frame_num++;
 
 		// update UI
-		running = ui.update(attacks); // will return false if player gives signal to quit
+		running = ui.update(&attacks); // will return false if player gives signal to quit
 
 		// update the server
 		//server.run_server();

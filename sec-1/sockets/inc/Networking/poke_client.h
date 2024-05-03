@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
-#include "../socklib.h"
-#include "../PokemonCreation/Pokemon.h"
-#include "../PokemonCreation/MyParty.h"
+#include "../../socklib.h"
+#include "../../PokemonCreation/Pokemon.h"
+#include "../../PokemonCreation/MyParty.h"
 
 class PokemonClient
 {

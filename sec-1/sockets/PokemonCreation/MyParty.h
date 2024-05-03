@@ -28,7 +28,6 @@ public:
 
 
 #pragma region File Creating / Accessing
-    //im crying
     bool CreateFolder()
     {
         namespace fs = std::filesystem;
@@ -60,7 +59,6 @@ public:
 #pragma endregion
 
 #pragma region PC Functions
-    //im gonna die
     void updatePc()
     {
         bool added = false;
@@ -70,7 +68,6 @@ public:
             Pokemon temp(fileDir);
             temp.readFiles(file, fileDir);
             PC.push_back(temp);
-            // temp.coutData();
             if (!added)
                 setParty(temp);
         }
@@ -114,6 +111,7 @@ public:
             checkPC();
             break;
         case 3:
+            setParty(*(PC.begin()));
             return;
         case 4:
             exit(1);
@@ -254,8 +252,6 @@ public:
         }
 
     }
-
-
 
     void checkPC()
     {
