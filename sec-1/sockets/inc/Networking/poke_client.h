@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../../inc/GameManager.h"
 #include "../../socklib.h"
 #include "../../PokemonCreation/Pokemon.h"
 #include "../../PokemonCreation/MyParty.h"
@@ -11,8 +12,8 @@ private:
 
 	char message_buffer[4096];
 	myParty party;
-
 	int client_id;
+
 
 	static std::vector<std::string> PokemonClient::split(const std::string& s, char delim);
 

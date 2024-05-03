@@ -28,7 +28,6 @@ PokemonClient::PokemonClient(const char* host, int port)
 	connected_sock = new Socket(Socket::Family::INET, Socket::Type::STREAM);
 	connected_sock->Connect(addr);
 	connected_sock->SetNonBlockingMode(true);
-
 	std::cout << "Client: Connected to server!\n";
 }
 
@@ -87,7 +86,15 @@ void PokemonClient::processPacket(std::string msg)
 
 	if (values[0].compare("BATTLEEVENT"))
 	{
-		
+		std::string id = values[1], attack = values[2];
+		if (id == "9")
+		{
+			//missed
+		}
+		else
+		{
+			GameManager::GetGameManager().updateEntry(std::stoi(id), GameManager::GetGameManager().getOtherPlayer(std::stoi(id))->leader, GameManager::GetGameManager().getPlayerAtIndex(std::stoi(id))->party[GameManager::GetGameManager().getPlayerAtIndex(std::stoi(id))->leader].getAttackAt(std::stoi(attack)).getDamage());
+		}
 	}
 
 	else if (values[0].compare("PARTYSETUP"))
