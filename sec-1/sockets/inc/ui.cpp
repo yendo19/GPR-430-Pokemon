@@ -11,7 +11,7 @@ void UiManager::setup()
 		printf("Error initializing SDL: %s\n", SDL_GetError());
 	}
 
-	wind = SDL_CreateWindow("Pokeman(?) Duel",
+	wind = SDL_CreateWindow(GameManager::GetGameManager().getIsServer() ? "Pokeman(?) Duel | SERVER" : "Pokeman(?) Duel | CLIENT",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		SCREEN_WIDTH, SCREEN_HEIGHT, 0);
@@ -77,7 +77,6 @@ void UiManager::setupActive(std::list<Button>* attacks, Pokemon active)
 
 void UiManager::initSprites()
 {
-
 	for (int i = 0; i < NUM_SPRITES; i++)
 	{
 		SDL_Surface* s = STBIMG_Load(("assets/SPRITE_" + std::to_string(i)).data());
@@ -157,8 +156,8 @@ bool UiManager::update(std::list<Button>* attacks, float dt)
 
 	for (int i = 0; i < 2; i++)
 	{
-		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex((size_t)0)), false, dt);
-		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex((size_t)1)), true, dt);
+		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex(0)), GameManager::GetGameManager().getIsServer(), dt);
+		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex(1)), !GameManager::GetGameManager().getIsServer(), dt);
 	}
 
 	for (Button b : *attacks)
