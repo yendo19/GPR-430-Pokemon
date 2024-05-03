@@ -1,4 +1,6 @@
 #include "ui.h"
+#define SDL_STBIMAGE_IMPLEMENTATION
+#include "SDL_stbimage.h"
 
 void UiManager::setup()
 {
@@ -43,11 +45,14 @@ void UiManager::setup()
 	}
 }
 
-void UiManager::setupAttacks(std::list<Button>* attacks, Pokemon active)
+void UiManager::setupActive(std::list<Button>* attacks, Pokemon active)
 {
-	int buttonPosXStart = 100;
+
+	attacks->clear();
+
+	int buttonPosXStart = 225;
 	int buttonPosX = buttonPosXStart;
-	int buttonPosY = 100;
+	int buttonPosY = 300;
 	int buttonSpacingX = 120;
 	int buttonSpacingY = 70;
 
@@ -69,7 +74,50 @@ void UiManager::setupAttacks(std::list<Button>* attacks, Pokemon active)
 		}
 	}
 }
-bool UiManager::update(std::list<Button>* attacks)
+
+void UiManager::initSprites()
+{
+
+	for (int i = 0; i < NUM_SPRITES; i++)
+	{
+		SDL_Surface* s = STBIMG_Load(("assets/SPRITE_" + std::to_string(i)).data());
+		SDL_Texture* t = SDL_CreateTextureFromSurface(rend, s);
+		sprites.push_back(t);
+
+		SDL_FreeSurface(s);
+	}
+
+}
+
+//render one players active & two benched 
+void UiManager::updateTeam(Player p, bool allied, float dt)
+{
+	SDL_Rect leaderRect;
+	leaderRect.x = allied ? 250 : 350;
+	leaderRect.y = 100;
+	leaderRect.w = 200;
+	leaderRect.h = 200;
+	SDL_RenderCopy(rend, sprites[p.party[p.leader].getSprite()], NULL, &leaderRect);
+
+	int partyX = allied ? 250 : 350;
+	for (int i = 0; i < 3; i++)
+	{
+		if (i == p.leader) continue;
+
+		SDL_Rect partyRect;
+		leaderRect.x = partyX;
+		leaderRect.y = 325;
+		leaderRect.w = 125;
+		leaderRect.h = 125;
+
+		partyX += allied ? -150 : 150;
+
+		SDL_RenderCopy(rend, sprites[p.party[p.leader].getSprite()], NULL, &partyRect);
+	}
+}
+
+
+bool UiManager::update(std::list<Button>* attacks, float dt)
 {
 	SDL_GetMouseState(mouseX, mouseY);
 	bool mbUp = false;
@@ -95,6 +143,12 @@ bool UiManager::update(std::list<Button>* attacks)
 	for (Button b : *attacks)
 	{
 		b.update(*mouseX, *mouseY, mbUp);
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex(0)), false, dt);
+		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex(1)), true, dt);
 	}
 
 	SDL_RenderPresent(rend);
