@@ -17,6 +17,7 @@
 #include "inc/Networking/poke_server.h"
 #include "inc/Networking/poke_client.h"
 #include "inc/GameManager.h"
+#include "PokemonCreation/MyParty.h"
 
 float ticks_to_sec(clock_t ticks) {
 	return (float)ticks / CLOCKS_PER_SEC;
@@ -50,7 +51,7 @@ void setupBattleUI(UiManager* ui, std::list<Button> attacks, PokemonClient* clie
 	}
 
 	// init attack UI
-	ui->setupActive(&attacks, client->getParty().getPokemonInPartyAt(0));
+	ui->setupActive(&attacks, client->getParty()->getPokemonInPartyAt(0));
 
 
 }

@@ -117,6 +117,7 @@ void GameManager::update(float dt, int frame_num)
 		//index at i lost
 	}
 
+}
 
 bool GameManager::isReady()
 {
@@ -210,17 +211,4 @@ Player* GameManager::getOtherPlayer(size_t index)
 	std::advance(nth, index);
 
 	return &*nth;
-}
-
-// Source: https://stackoverflow.com/a/46931770
-std::vector<std::string> split(const std::string& s, char delim) {
-	std::vector<std::string> result;
-	std::stringstream ss(s);
-	std::string item;
-
-	while (getline(ss, item, delim)) {
-		result.push_back(item);
-	}
-
-	return result;
 }

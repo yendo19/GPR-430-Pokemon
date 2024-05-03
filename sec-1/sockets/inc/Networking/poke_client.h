@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-extern class Socket;
-extern class myParty;
-extern enum State;
+class Socket;
+class myParty;
+enum State;
 
 class PokemonClient
 {
@@ -16,8 +16,6 @@ private:
 	int client_id;
 
 	State current_state;
-	myParty* party;
-	int client_id;
 
 public:
 
@@ -33,6 +31,5 @@ public:
 	std::string receivePacket();
 	void processPacket(std::string msg);
 };
-#pragma endregion
 
 

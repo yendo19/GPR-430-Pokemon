@@ -1,11 +1,11 @@
 #pragma once
 #include <list>
 
-extern class PokemonClient;
-extern class PokemonServer;
-extern struct Player;
-extern struct BattleEvent;
-extern enum State;
+class PokemonClient;
+class PokemonServer;
+struct Player;
+struct BattleEvent;
+enum State;
 
 class GameManager
 {
@@ -85,6 +85,3 @@ public:
 
 	
 };
-
-
-#pragma endregion

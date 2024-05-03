@@ -25,7 +25,7 @@ enum State
 };
 
 // Source: https://stackoverflow.com/a/46931770
-std::vector<std::string> split(const std::string& s, char delim) {
+static std::vector<std::string> split(const std::string& s, char delim) {
 	std::vector<std::string> result;
 	std::stringstream ss(s);
 	std::string item;
@@ -36,4 +36,3 @@ std::vector<std::string> split(const std::string& s, char delim) {
 
 	return result;
 }
-#pragma endregion
