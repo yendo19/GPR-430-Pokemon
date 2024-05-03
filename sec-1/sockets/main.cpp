@@ -37,15 +37,12 @@ void setupBattleUI(UiManager* ui, std::list<Button> attacks, PokemonClient* clie
 	auto rng = std::default_random_engine{};
 	std::shuffle(std::begin(spriteIndexes), std::end(spriteIndexes), rng);
 
-	if (GameManager::GetGameManager().getIsServer())
+	for (int i = 0; i < 2; i++)
 	{
-		for (int i = 0; i < 2; i++)
+		for (int j = 0; j < 3; j++)
 		{
-			for (int j = 0; j < 3; j++)
-			{
-				GameManager::GetGameManager().getPlayerAtIndex((size_t)i)->party[j].setSprite(spriteIndexes.back());
-				spriteIndexes.pop_back();
-			}
+			GameManager::GetGameManager().getPlayerAtIndex((size_t)i)->party[j].setSprite(spriteIndexes.back());
+			spriteIndexes.pop_back();
 		}
 	}
 
