@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
 	PokemonServer* server = nullptr;
 
-	if (argc == 1) {
+	if (argc > 1) {
 		// HOST ===========================
 		// create the server
 		server = new PokemonServer("127.0.0.1", 69420);
