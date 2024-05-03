@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "GameManager.h"
+#include "Extras.h"
 
 class Button
 {

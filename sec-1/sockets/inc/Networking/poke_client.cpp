@@ -1,18 +1,8 @@
 #include "poke_client.h"
 #include "../../PokemonCreation/MyParty.h"
-
-// Source: https://stackoverflow.com/a/46931770
-std::vector<std::string> split(const std::string& s, char delim) {
-	std::vector<std::string> result;
-	std::stringstream ss(s);
-	std::string item;
-
-	while (getline(ss, item, delim)) {
-		result.push_back(item);
-	}
-
-	return result;
-}
+#include "../../socklib.h"
+#include "../../PokemonCreation/Pokemon.h"
+#include "../Extras.h"
 
 PokemonClient::PokemonClient(const char* host, int port)
 {
@@ -29,6 +19,7 @@ PokemonClient::PokemonClient(const char* host, int port)
 	connected_sock->SetNonBlockingMode(true);
 
 	std::cout << "Client: Connected to server!\n";
+	current_state = CONNECTED;
 }
 
 void PokemonClient::initParty()
@@ -37,12 +28,17 @@ void PokemonClient::initParty()
 	std::string filePath = "assets";
 	//std::cout << filePath;
 	std::list<Pokemon> temp;
-	party = myParty();
-	party.Init(filePath);
-	party.CreateFolder();
-	party.updatePc();
+	party = new myParty();
+	party->Init(filePath);
+	party->CreateFolder();
+	party->updatePc();
 
-	party.Update();
+	party->Update();
+}
+
+myParty PokemonClient::getParty()
+{
+	return *party;
 }
 
 PokemonClient::~PokemonClient()
@@ -77,12 +73,64 @@ void PokemonClient::processPacket(std::string msg)
 	// should have at least 2 values (LIST and one number)
 	if (values.size() <= 1) { is_valid = false; }
 
-	// first value should be LIST
-	if (values[0].compare("YOURID")) 
+	// first value should be LABEL
+	switch (current_state)
 	{
-		client_id = std::stoi(values[1]);
-		std::cout << "Client: Got my ID: " << client_id << "\n";
+	case CONNECTED:
+		if (values[0].compare("YOURID"))
+		{
+			client_id = std::stoi(values[1]);
+			std::cout << "Client: Got my ID: " << client_id << "\n";
+
+			// show connected UI....
+		}
+		if (values[0].compare("CHANGESTATE"))
+		{
+			if (values[1].compare("CHOOSE_ATTACKS"))
+			{
+				current_state = CHOOSE_ATTACKS;
+				std::cout << "Client: Changing state to CHOOSE_ATTACKS.\n";
+
+				// show our attack UI....
+
+				// once we're clicked an attack button, we should move to 
+				// current_state = WAITING;
+				// and disable to attack choosing UI
+			}
+		}
+		break;
+	case CHOOSE_ATTACKS:
+		if (values[0].compare("CHANGESTATE"))
+		{
+			if (values[1].compare("DISPLAY_ATTACKS"))
+			{
+				current_state = DISPLAY_ATTACKS;
+				std::cout << "Client: Changing state to DISPLAY_ATTACKS.\n";
+
+				// this calls once all players have submitted their attacks
+				// at this point the client should've already updated
+				// their entries as they have been receiving
+				// battle events up to this point
+			}
+		}
+		break;
+	case DISPLAY_ATTACKS:
+		if (values[0].compare("CHANGESTATE"))
+		{
+			if (values[1].compare("CHOOSE_ATTACKS"))
+			{
+				current_state = CHOOSE_ATTACKS;
+				std::cout << "Client: Changing state to CHOOSE_ATTACKS.\n";
+
+				// time for players to choose attacks again
+				// after the server sends the signal to display attacks,
+				// the server will wait like 10 seconds then
+				// send the signal to choose attacks again
+			}
+		}
+		break;
 	}
+	
 
 	if (values[0].compare("BATTLEEVENT"))
 	{

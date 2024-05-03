@@ -1,4 +1,9 @@
 #include "GameManager.h"
+#include "../PokemonCreation/MyParty.h"
+#include "../PokemonCreation/Attacks.h"
+#include "./Networking/poke_server.h"
+#include "./Networking/poke_client.h"
+#include "Extras.h"
 
 char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
 {
@@ -69,10 +74,60 @@ GameManager::GameManager()
 	connected_players = std::list<Player>();
 	current_round = 0;
 	event_queue = std::list<BattleEvent>();
+	deltaTime = 0;
 }
 
 GameManager::~GameManager()
 {
+}
+
+void GameManager::update(float dt, int frame_num)
+{
+	local_client->update(dt, frame_num);
+
+	if (!isServer) return;
+	server->update(dt, frame_num);
+	// do round:
+
+	// once the server has accepted all connections,
+	// it ask clients to choose attacks
+	switch (server->getState())
+	{
+	case CHOOSE_ATTACKS:
+		// wait for all clients to send attack events to the server...
+
+		// once we have 2 events queued, it's time to move to processing events
+		if (event_queue.size() == 2)
+		{
+			// broadcast the changes to the clients
+			broadcastEventsToClients();
+			event_queue.clear(); // clear the queue
+			phaseStartTime = (float)clock() / CLOCKS_PER_SEC;
+
+			setState(State::DISPLAY_ATTACKS);
+			std::string msg = "CHANGESTATE DISPLAY_ATTACKS";
+			server->sendToAllClients(msg.c_str());
+		}
+		break;
+	case DISPLAY_ATTACKS:
+		// wait like 10 seconds before changing back to choose attacks
+		deltaTime = ((float)clock() / CLOCKS_PER_SEC) - phaseStartTime;
+
+		if (deltaTime > 10.0f)
+		{
+			// tell the servers to choose attacks again
+			std::string msg = "CHANGESTATE CHOOSE_ATTACKS";
+			server->sendToAllClients(msg.c_str());
+		}
+		break;
+	}
+
+	// check if anybody has won/lost
+	if (int i = checkLoss() != -1)
+	{
+		//index at i lost
+	}
+
 }
 
 int GameManager::checkLoss()
@@ -86,6 +141,11 @@ int GameManager::checkLoss()
 		}
 	}
 	return -1;
+}
+
+void GameManager::setState(State state)
+{
+	server->setState(state);
 }
 
 void GameManager::acceptAttackInput(BattleEvent battleEvent)

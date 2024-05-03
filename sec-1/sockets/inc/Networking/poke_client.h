@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
-#include "../../socklib.h"
-#include "../../PokemonCreation/Pokemon.h"
-#include "../../PokemonCreation/MyParty.h"
+
+class Socket;
+class myParty;
+enum State;
 
 class PokemonClient
 {
@@ -10,9 +11,11 @@ private:
 	Socket* connected_sock;
 
 	char message_buffer[4096];
-	myParty party;
+	myParty* party;
 
 	int client_id;
+
+	State current_state;
 
 public:
 
@@ -22,10 +25,7 @@ public:
 	void initParty();
 	void update(float dt, int frame_num);
 	
-	myParty getParty()
-	{
-		return party;
-	}
+	myParty getParty();
 
 	void sendToServer(const char* data);
 	std::string receivePacket();

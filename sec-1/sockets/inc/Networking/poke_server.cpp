@@ -1,17 +1,5 @@
 #include "poke_server.h"
-
-// Source: https://stackoverflow.com/a/46931770
-std::vector<std::string> split(const std::string& s, char delim) {
-	std::vector<std::string> result;
-	std::stringstream ss(s);
-	std::string item;
-
-	while (getline(ss, item, delim)) {
-		result.push_back(item);
-	}
-
-	return result;
-}
+#include "../Extras.h"
 
 PokemonServer::PokemonServer(const char* host, int port)
 {
@@ -22,16 +10,22 @@ PokemonServer::PokemonServer(const char* host, int port)
 	listen_sock->Listen();
 	//listen_sock->SetNonBlockingMode(true);
 	connections = 0;
+	state = CONNECTED;
 }
 
 void PokemonServer::acceptConnections()
 {
-	//std::thread player1(&PokemonServer::acceptConnection, this);
-	//std::thread player2(&PokemonServer::acceptConnection, this);
 	for (int i = 0; i < 2; ++i)
 	{
 		acceptConnection();
 	}
+
+	// ALL CONNECTIONS HAVE BEEN RECEIVED!!
+	setState(CHOOSE_ATTACKS);
+
+	//send signal to clients to choose attacks
+	std::string msg = "CHANGESTATE CHOOSE_ATTACKS";
+	sendToAllClients(msg.c_str());
 }
 
 void PokemonServer::acceptConnection()

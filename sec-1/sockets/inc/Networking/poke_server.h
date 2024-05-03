@@ -4,14 +4,12 @@
 #include <string>
 #include <time.h>
 #include <stdlib.h>
-#include <filesystem>
 #include "../../socklib.h"
-#include "../../PokemonCreation/MyParty.h"
 #include <iostream>
 #include <fstream>
 #include <list>
-#include <thread>
-#include <memory>
+
+enum State;
 
 class PokemonServer {
 
@@ -20,7 +18,7 @@ private:
 	Socket* listen_sock;
 	std::vector<Socket*> connection_sockets;
 
-	std::thread t1;
+	State state;
 
 public:
 	/// <summary>
@@ -42,5 +40,8 @@ public:
 	void sendToAllClients(const char* data);
 
 	void processPacket(std::string msg);
+
+	void setState(State state) { this->state = state; }
+	State getState() { return this->state; }
 };
 #pragma endregion

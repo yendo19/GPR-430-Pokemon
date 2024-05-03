@@ -1,25 +1,11 @@
 #pragma once
 #include <list>
-#include "../PokemonCreation/MyParty.h"
-#include "../PokemonCreation/Attacks.h"
-#include "./Networking/poke_server.h"
-#include "./Networking/poke_client.h"
 
-struct BattleEvent
-{
-	int client_id;
-	int attackIndex;
-};
-
-struct Player
-{
-	int client_id;
-	int leader;
-	Pokemon party[3];
-};
-
-//class PokemonClient;
-//class PokemonServer;
+class PokemonClient;
+class PokemonServer;
+struct Player;
+struct BattleEvent;
+enum State;
 
 class GameManager
 {
@@ -40,6 +26,8 @@ private:
 
 	bool isServer;
 
+	float deltaTime;
+	float phaseStartTime;
 public:
 
 	GameManager();
@@ -78,29 +66,9 @@ public:
 
 	bool getIsServer() { return isServer; }
 
-	void update(float dt, int frame_num)
-	{
-		local_client->update(dt, frame_num);
-
-		if (!isServer) return;
-		server->update(dt, frame_num);
-		// do round:
-		
-		// ask clients to choose attacks
-
-		// wait for the clients to send attack events to the server
-		// 
-		// once we have 2 events queued, it's time to move to processing events
-
-		// broadcast the changes to the clients
-		broadcastEventsToClients();
-		// check if anybody has won/lost
-		if (int i = checkLoss() != -1)
-		{
-			//index at i lost
-		}
-
-	}
+	void setState(State state);
+	
+	void update(float dt, int frame_num);
 
 	void setServer(PokemonServer* srv)
 	{
@@ -112,6 +80,8 @@ public:
 	{
 		local_client = cli;
 	}
+
+	
 };
 
 
