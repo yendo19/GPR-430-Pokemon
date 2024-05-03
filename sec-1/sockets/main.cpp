@@ -15,9 +15,7 @@
 #include "SDL_ttf.h"
 
 #include "inc/button.h"
-
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+#include "inc/ui.h"
 
 SDL_Window* wind;
 SDL_Renderer* rend;
@@ -40,47 +38,6 @@ std::string getCurrentLocation() {
 	std::filesystem::path main_cpp_path = __FILE__;
 	std::filesystem::path main_cpp_folder = main_cpp_path.parent_path();
 	return main_cpp_folder.string();
-}
-
-void setupSDL()
-{
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		printf("Error initializing SDL: %s\n", SDL_GetError());
-	}
-
-	wind = SDL_CreateWindow("Pokeman(?) Duel",
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-	if (!wind)
-	{
-		printf("Error creating window: %s\n", SDL_GetError());
-		SDL_Quit();
-		return;
-	}
-
-	/* Create a renderer */
-	Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-	rend = SDL_CreateRenderer(wind, -1, render_flags);
-	if (!rend)
-	{
-		printf("Error creating renderer: %s\n", SDL_GetError());
-		SDL_DestroyWindow(wind);
-		SDL_Quit();
-	}
-
-	if (TTF_Init() != 0)
-	{
-		printf("Error Initializing TTF%s\n", TTF_GetError());
-		TTF_Quit();
-	}
-
-	encode = TTF_OpenFont("assets/EncodeRegular.ttf", 12);
-	if (encode == NULL)
-	{
-		std::cout << SDL_GetError() << std::endl;
-	}
 }
 
 //FROM IN CLASS CODE
@@ -171,9 +128,7 @@ int main()
 
 	system("pause");
 
-
-
-	setupSDL();
+	setupSDL(&wind, &rend, &encode);
 
 	bool running = true;
 	SDL_Event event;
