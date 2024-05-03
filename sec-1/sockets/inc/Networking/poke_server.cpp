@@ -63,7 +63,7 @@ void PokemonServer::update(float dt, int frame_num)
 			int error = conn_sock->GetLastError();
 			if (error == Socket::SOCKLIB_ETIMEDOUT)
 			{
-				std::cout << "Server: Client timed out." << "\n";
+				//std::cout << "Server: Client timed out." << "\n";
 				break;
 			}
 			else if (error == Socket::SOCKLIB_EWOULDBLOCK) {
