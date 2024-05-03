@@ -241,6 +241,32 @@ public:
 
 	}
 
+	static Pokemon deserialize(std::string ser)
+	{
+		int count = 0;
+		std::list<std::string> holder = split(ser);
+		std::list<std::string>::iterator it;
+		it = holder.begin();
+		std::string name = *it;
+		it++;
+		std::string hp = *it;
+		it++;
+		std::string speed = *it;
+		Attack atks[4];
+		for (int i = 0; i < 4; i++)
+		{
+			it++;
+			std::string atkName = *it;
+			it++;
+			std::string atkDmg = *it;
+
+			Attack temp(atkName, stoi(atkDmg));
+			atks[i] = temp;
+		}
+		Pokemon pkm(name, stoi(hp), stoi(speed), atks, "");
+
+	}
+
 	static std::string serializeMove(Pokemon pkmn, Attack atk)
 	{
 		std::string temp;
@@ -265,6 +291,11 @@ public:
 			temp.push_back(c);
 
 		return temp;
+	}
+
+	void applyDamage(int damage)
+	{
+		_currentHealth -= damage;
 	}
 };
 
