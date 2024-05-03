@@ -29,7 +29,7 @@ void PokemonServer::update(float dt, int frame_num)
 	while (connection_alive) {
 		char buffer[4096];
 
-		std::cout << "Server: Connection live, processing packets\n";
+		//std::cout << "Server: Connection live, processing packets\n";
 		int nbytes_recvd = conn_sock->Recv(buffer, sizeof(buffer));
 		if (nbytes_recvd == -1) {
 			int error = conn_sock->GetLastError();
@@ -40,7 +40,7 @@ void PokemonServer::update(float dt, int frame_num)
 				break;
 			}
 			else if (error == Socket::SOCKLIB_EWOULDBLOCK) {
-				std::cout << "Server: Received no message this frame.\n";
+				//std::cout << "Server: Received no message this frame.\n";
 				break;
 			}
 			else {

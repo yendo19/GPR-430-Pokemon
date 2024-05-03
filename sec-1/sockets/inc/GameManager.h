@@ -2,7 +2,8 @@
 #include <list>
 #include "../PokemonCreation/MyParty.h"
 #include "../PokemonCreation/Attacks.h"
-#include "random"
+#include "./Networking/poke_server.h"
+#include "./Networking/poke_client.h"
 
 struct BattleEvent
 {
@@ -17,9 +18,15 @@ struct Player
 	Pokemon party[3];
 };
 
+//class PokemonClient;
+//class PokemonServer;
+
 class GameManager
 {
 private:
+	PokemonClient* local_client;
+	PokemonServer* server;
+
 	std::list<Player> connected_players;
 
 	// Round-related
@@ -67,10 +74,12 @@ public:
 
 	bool getIsServer() { return isServer; }
 
-	void update()
+	void update(float dt, int frame_num)
 	{
-		if (!isServer) return;
+		local_client->update(dt, frame_num);
 
+		if (!isServer) return;
+		server->update(dt, frame_num);
 		// do round:
 		
 		// ask clients to choose attacks
@@ -86,6 +95,17 @@ public:
 		// check if anybody has won/lost
 
 
+	}
+
+	void setServer(PokemonServer* srv)
+	{
+		server = srv;
+		isServer = true;
+	}
+
+	void setClient(PokemonClient* cli)
+	{
+		local_client = cli;
 	}
 };
 

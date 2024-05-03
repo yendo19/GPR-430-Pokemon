@@ -13,6 +13,7 @@
 
 #include "inc/Networking/poke_server.h"
 #include "inc/Networking/poke_client.h"
+#include "inc/GameManager.h"
 
 float ticks_to_sec(clock_t ticks) {
 	return (float)ticks / CLOCKS_PER_SEC;
@@ -27,6 +28,8 @@ int main(int argc, char* argv[])
 {
 	SockLibInit();
 	atexit(SockLibShutdown);
+
+	GameManager gm = GameManager::GetGameManager();
 
 	////if (argc > 1) {
 	//	return run_server();
@@ -43,9 +46,11 @@ int main(int argc, char* argv[])
 	// HOST ===========================
 	// create the server
 	PokemonServer server = PokemonServer("127.0.0.1", 69420);
+	gm.setServer(&server);
 	
 	// create the client to connect to the server
 	PokemonClient client = PokemonClient("127.0.0.1", 69420);
+	gm.setClient(&client);
 
 	server.acceptConnections();
 
@@ -79,13 +84,7 @@ int main(int argc, char* argv[])
 		std::cout << "==========================\n";
 		std::cout << "Frame " << frame_num << "\n";
 
-		// update the server
-		server.update(dt, frame_num);
-
-		// update the client
-		client.update(dt, frame_num);
-
-		
+		gm.update(dt, frame_num);
 	}
 
 	return 0;
