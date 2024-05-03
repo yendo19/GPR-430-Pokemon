@@ -24,7 +24,7 @@ private:
 	std::list<BattleEvent> event_queue;
 
 	static char* serializeBattleEvent(BattleEvent battleEvent);
-	static void deserializeBattleEvent(char* serialized_event);
+	static BattleEvent deserializeBattleEvent(char* serialized_event);
 
 public:
 

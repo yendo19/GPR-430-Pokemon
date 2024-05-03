@@ -1,11 +1,11 @@
 #include "GameManager.h"
 
-static char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
+char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
 {
 	// to be implemented
 }
 
-static void GameManager::deserializeBattleEvent(char* serialized_event)
+BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 {
 	// to be implemented
 
@@ -48,7 +48,7 @@ void GameManager::queueEvent(char* serializedBattleEvent)
 void GameManager::broadcastEventsToClients()
 {
 	// process all events that are queued (this happens at the end of each round)
-	for (int i = 0; i < event_queue.size; ++i)
+	for (int i = 0; i < event_queue.size(); ++i)
 	{
 		// determine the new health of target pokemon
 
