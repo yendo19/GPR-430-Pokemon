@@ -146,7 +146,11 @@ void GameManager::setState(State state)
 
 void GameManager::acceptAttackInput(BattleEvent battleEvent)
 {
-	GetGameManager().broadcastEventsToClients();
+	std::cout << "Attack selected by " << battleEvent.client_id << ". AttackIndex: " << battleEvent.attackIndex << '\n';
+	//GetGameManager().broadcastEventsToClients();
+	std::string msg = serializeBattleEvent(battleEvent);
+	GetGameManager().local_client->sendToServer(msg);
+	//GetGameManager().queueEvent(serializeBattleEvent(battleEvent));
 }
 
 // CALLED BY SERVER
@@ -172,6 +176,7 @@ void GameManager::sendEventToServer(BattleEvent battleEvent)
 // this should be called whenever the server receives an event
 void GameManager::queueEvent(char* serializedBattleEvent)
 {
+	std::cout << "Server: Queueing event: " << serializeBattleEvent << '\n';
 	BattleEvent battleEvent = deserializeBattleEvent(serializedBattleEvent);
 	event_queue.push_back(battleEvent);
 }
@@ -179,6 +184,7 @@ void GameManager::queueEvent(char* serializedBattleEvent)
 // CALLED BY SERVER
 void GameManager::broadcastEventsToClients()
 {
+
 	for (BattleEvent move : event_queue)
 	{
 		// ask the server to send the msg to all clients
@@ -209,4 +215,9 @@ Player* GameManager::getOtherPlayer(size_t index)
 		index = 0;
 
 	return &connected_players[index];
+}
+
+int GameManager::getLocalClientId()
+{
+	return local_client->getId();
 }

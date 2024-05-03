@@ -62,6 +62,7 @@ void UiManager::setupActive(std::list<Button>* attacks, Pokemon active)
 		attacks->push_back(Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, display));
 
 		BattleEvent e;
+		e.client_id = GameManager::GetGameManager().getLocalClientId();
 		e.attackIndex = i;
 
 		attacks->back().updateCallback(GameManager::acceptAttackInput, e);
@@ -134,18 +135,20 @@ bool UiManager::update(std::list<Button>* attacks, float dt)
 {
 	SDL_GetMouseState(mouseX, mouseY);
 	bool mbUp = false;
-	SDL_PollEvent(&event);
-	switch (event.type)
+	while (SDL_PollEvent(&event))
 	{
-	case SDL_QUIT:
-		running = false;
-		break;
-	case SDL_MOUSEBUTTONUP:
-		if (event.button.button == SDL_BUTTON_LEFT)
+		switch (event.type)
 		{
-			mbUp = true;
+		case SDL_QUIT:
+			running = false;
+			break;
+		case SDL_MOUSEBUTTONUP:
+			if (event.button.button == SDL_BUTTON_LEFT)
+			{
+				mbUp = true;
+			}
+			break;
 		}
-		break;
 	}
 	
 	SDL_SetRenderDrawColor(rend, 30, 30, 30, 255);

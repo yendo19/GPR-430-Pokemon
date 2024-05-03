@@ -27,7 +27,7 @@ float now() {
 	return ticks_to_sec(clock());
 }
 
-void setupBattleUI(UiManager* ui, std::list<Button> attacks, PokemonClient* client)
+void setupBattleUI(UiManager* ui, std::list<Button> *attacks, PokemonClient* client)
 {
 	ui->initSprites();
 
@@ -47,9 +47,7 @@ void setupBattleUI(UiManager* ui, std::list<Button> attacks, PokemonClient* clie
 	}
 
 	// init attack UI
-	ui->setupActive(&attacks, client->getParty()->getPokemonInPartyAt(0));
-
-
+	ui->setupActive(attacks, client->getParty()->getPokemonInPartyAt(0));
 }
 
 #undef main
@@ -60,7 +58,7 @@ int main(int argc, char* argv[])
 
 	PokemonServer* server = nullptr;
 
-	if (argc > 1) {
+	if (argc == 1) {
 		// HOST ===========================
 		// create the server
 		server = new PokemonServer("127.0.0.1", 69420);
@@ -86,6 +84,7 @@ int main(int argc, char* argv[])
 	
 	UiManager ui = UiManager();
 	std::list<Button> attacks;
+	//ui.setupActive(&attacks, client.getParty().getPokemonInPartyAt(0));
 	
 	bool batteling = false;
 	//GAME LOOP
@@ -99,21 +98,11 @@ int main(int argc, char* argv[])
 			continue;
 		frame_num++;
 
-
-		// only update client and server every other frame
-		if (frame_num % 60 != 0) continue;
-
-
-		//std::cout << "==========================\n";
-		//std::cout << "Frame " << frame_num << "\n";
-
-		GameManager::GetGameManager().update(dt, frame_num);
-
-		
+		// update UI every frame
 		if (GameManager::GetGameManager().isReady() && !batteling)
 		{
 			batteling = true;
-			setupBattleUI(&ui, attacks, &client);
+			setupBattleUI(&ui, &attacks, &client);
 		}
 
 		if (batteling)
@@ -121,8 +110,11 @@ int main(int argc, char* argv[])
 			// update UI every frame
 			running = ui.update(&attacks, dt); // will return false if player gives signal to quit
 		}
-		
 
+		// only update client and server every second
+		//if (frame_num % 60 != 0) continue;
+
+		GameManager::GetGameManager().update(dt, frame_num);
 		last_frame = time;
 	}
 

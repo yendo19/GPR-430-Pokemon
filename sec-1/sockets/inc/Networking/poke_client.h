@@ -30,6 +30,8 @@ public:
 	void sendToServer(std::string data);
 	std::string receivePacket();
 	void processPacket(std::string msg);
+
+	int getId() { return client_id; }
 };
 
 

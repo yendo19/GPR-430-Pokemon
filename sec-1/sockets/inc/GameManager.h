@@ -83,5 +83,6 @@ public:
 		local_client = cli;
 	}
 
+	int getLocalClientId();
 	
 };
