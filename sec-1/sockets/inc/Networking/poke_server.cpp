@@ -29,7 +29,7 @@ void PokemonServer::acceptConnection()
 	connection_sockets.push_back(conn_sock);
 
 	// track the player that just joined
-	//....
+	
 }
 
 
@@ -89,4 +89,9 @@ void PokemonServer::sendToClients(const char* data)
 	{
 		conn_sock->Send(data, std::strlen(data));
 	}
+}
+
+void PokemonServer::sendToClient(int client_id, const char* data)
+{
+
 }
