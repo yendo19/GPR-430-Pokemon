@@ -75,16 +75,16 @@ void PokemonClient::processPacket(std::string msg)
 	switch (current_state)
 	{
 	case CONNECTED:
-		if (values[0].compare("YOURID"))
+		if (values[0] == ("YOURID"))
 		{
 			client_id = std::stoi(values[1]);
 			std::cout << "Client: Got my ID: " << client_id << "\n";
 
 			// show connected UI....
 		}
-		if (values[0].compare("CHANGESTATE"))
+		if (values[0] ==("CHANGESTATE"))
 		{
-			if (values[1].compare("CHOOSE_ATTACKS"))
+			if (values[1] == ("CHOOSE_ATTACKS"))
 			{
 				current_state = CHOOSE_ATTACKS;
 				std::cout << "Client: Changing state to CHOOSE_ATTACKS.\n";
@@ -98,9 +98,9 @@ void PokemonClient::processPacket(std::string msg)
 		}
 		break;
 	case CHOOSE_ATTACKS:
-		if (values[0].compare("CHANGESTATE"))
+		if (values[0] == ("CHANGESTATE"))
 		{
-			if (values[1].compare("DISPLAY_ATTACKS"))
+			if (values[1] == ("DISPLAY_ATTACKS"))
 			{
 				current_state = DISPLAY_ATTACKS;
 				std::cout << "Client: Changing state to DISPLAY_ATTACKS.\n";
@@ -113,9 +113,9 @@ void PokemonClient::processPacket(std::string msg)
 		}
 		break;
 	case DISPLAY_ATTACKS:
-		if (values[0].compare("CHANGESTATE"))
+		if (values[0] == ("CHANGESTATE"))
 		{
-			if (values[1].compare("CHOOSE_ATTACKS"))
+			if (values[1] == ("CHOOSE_ATTACKS"))
 			{
 				current_state = CHOOSE_ATTACKS;
 				std::cout << "Client: Changing state to CHOOSE_ATTACKS.\n";
@@ -137,7 +137,7 @@ void PokemonClient::processPacket(std::string msg)
 	}
 	
 
-	if (values[0].compare("BATTLEEVENT"))
+	if (values[0] == ("BATTLEEVENT"))
 	{
 		std::string id = values[1], attack = values[2];
 		if (id == "9")
@@ -150,7 +150,7 @@ void PokemonClient::processPacket(std::string msg)
 		}
 	}
 
-	else if (values[0].compare("PARTYSETUP"))
+	if (values[0] == "PARTYSETUP")
 	{
 
 		Player p_server;

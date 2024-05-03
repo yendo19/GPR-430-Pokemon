@@ -102,11 +102,11 @@ void PokemonServer::processPacket(std::string msg)
 	int senderId = std::stoi(values[0]);
 	
 	// second value should be the HEADER
-	if (values[1].compare("BATTLEEVENT"))
+	if (values[1] == ("BATTLEEVENT"))
 	{
 		// do somethign....
 	}
-	else if (values[1].compare("PARTYSETUP"))
+	else if (values[1] == ("PARTYSETUP"))
 	{
 
 		Player p;
