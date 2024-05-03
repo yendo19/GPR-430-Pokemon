@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -5,7 +6,6 @@
 #include <stdlib.h>
 #include <filesystem>
 #include "../socklib.h"
-#include "../defer.h"
 #include "../PokemonCreation/MyParty.h"
 #include <iostream>
 #include <fstream>
@@ -28,5 +28,6 @@ public:
 
 	~PokemonServer();
 
-	void run_server();
+	int run_server();
 };
+#pragma endregion

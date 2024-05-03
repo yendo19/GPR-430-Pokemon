@@ -16,10 +16,22 @@
 
 class Pokemon
 {
+private:
+	std::string _name;
+	int _currentHealth;
+	int _maxHealth;
+	int _speed;
+	attacks _myAttacks[4];
+	std::string fileDir;
+
 public:
 	Pokemon()
 	{
-
+		_name = "";
+		_maxHealth = 0;
+		_currentHealth = 0;
+		_speed = 0;
+		fileDir = "";
 	}
 
 	Pokemon(std::string name, int hp, int speed , attacks atks[4], std::string file)
@@ -124,7 +136,7 @@ public:
 #pragma endregion
 
 #pragma region Serialize/Deserialize
-	std::list<char> serialize()
+	char* serialize()
 	{
 		std::list<char> temp;
 		std::stringstream num;
@@ -179,7 +191,9 @@ public:
 				temp.push_back(c);
 		}
 		
-		return temp;
+		// convert to array
+		char** buffer = (char**)malloc(sizeof(char*) * temp.size());
+		return *buffer;
 	}
 
 	std::list<std::string> split(const std::string& str) {
@@ -207,18 +221,40 @@ public:
 
 	}
 
+	static void pickAttack(std::string data)
+	{
+		//TODO:send the chosen attack's power to the other player
+		//for now, just print out the data
+		std::cout << data;
+	}
 
-#pragma endregion
+	static std::string serializeMove(Pokemon pkmn, attacks atk)
+	{
+		std::string temp;
+		std::stringstream num;
+		std::string numbers;
 
+		num.str("");
+		num << pkmn.getSpeed();
+		numbers = num.str();
+		for (char c : numbers)
+			temp.push_back(c);
+		temp.push_back(':');
+		for (char c : atk.getName())
+			temp.push_back(c);
+		temp.push_back(':');
+		num.str("");
+		num.clear();
+		numbers.erase();
+		num << atk.getDamage();
+		numbers = num.str();
+		for (char c : numbers)
+			temp.push_back(c);
 
-private:
-	std::string _name;
-	int _currentHealth;
-	int _maxHealth;
-	int _speed;
-	attacks _myAttacks[4];
-	std::string fileDir;
+		return temp;
+	}
 };
 
+#pragma endregion
 
 
