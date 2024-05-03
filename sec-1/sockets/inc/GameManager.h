@@ -28,7 +28,6 @@ private:
 	bool isServer;
 
 	float deltaTime;
-	float phaseStartTime;
 public:
 
 	GameManager();

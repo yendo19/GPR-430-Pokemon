@@ -121,7 +121,7 @@ void PokemonServer::processPacket(std::string msg)
 	
 	if (values[1] == ("PARTYSETUP"))
 	{
-
+		// deserialize client's player
 		Player p;
 		p.client_id = senderId;
 		p.leader = 0;
@@ -135,6 +135,15 @@ void PokemonServer::processPacket(std::string msg)
 		std::cout << "Pokemon 2: " << p.party[1].getName() << '\n';
 		std::cout << "Pokemon 3: " << p.party[2].getName() << '\n';
 		GameManager::GetGameManager().trackPlayer(p);
+
+		// send our player data back to the client
+		Player local_player = *(GameManager::GetGameManager().getPlayerAtIndex(0));
+		std::string outmsg = "PARTYSETUP " 
+			+ std::string(local_player.party[0].serialize()) + " "
+			+ std::string(local_player.party[1].serialize()) + " "
+			+ std::string(local_player.party[2].serialize());
+		//sendToServer(outmsg.data());
+		sendToClient(1, outmsg);
 	}
 }
 
