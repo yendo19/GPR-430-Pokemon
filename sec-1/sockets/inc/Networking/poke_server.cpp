@@ -6,6 +6,8 @@ PokemonServer::PokemonServer(const char* host, int port)
 	listen_sock = new Socket(Socket::Family::INET, Socket::Type::STREAM);
 	listen_sock->Bind(Address(host, port));
 	listen_sock->Listen();
+	listen_sock->SetNonBlockingMode(true);
+	
 }
 
 PokemonServer::~PokemonServer()
@@ -14,45 +16,54 @@ PokemonServer::~PokemonServer()
 	listen_sock = NULL;
 }
 
-int PokemonServer::update() {
+void PokemonServer::update(float dt, int frame_num)
+{
+
+	std::cout << "Server: Waiting for connection...\n";
 	// Simple demo to demonstrate serialization
 	// over TCP
-	// Create a socket, wait for folks to connect
+	listen_sock->SetTimeout(.1);
+	Socket conn_sock = listen_sock->Accept();
+	std::cout << "Server: Got connection.\n";
+	conn_sock.SetTimeout(.1);
+	connection_alive = true;
 
-	while (true) {
-		Socket conn_sock = listen_sock->Accept();
-		bool connection_alive = true;
-		std::vector<Pokemon*> game_objects;
-		while (connection_alive) {
-			char buffer[4096];
+	while (connection_alive) {
+		char buffer[4096];
 
-			int nbytes_recvd = conn_sock.Recv(buffer, sizeof(buffer));
-			if (nbytes_recvd == -1) {
-				if (conn_sock.GetLastError() == Socket::SOCKLIB_ETIMEDOUT) {
-					// No data was available to receive.
-				}
-				else {
-					perror("recv()");
-					exit(1);
-				}
+		std::cout << "Server: Connection live, processing packets\n";
+		int nbytes_recvd = conn_sock.Recv(buffer, sizeof(buffer));
+		std::cout << "Server: Bytes received: " << nbytes_recvd << "\n";
+		if (nbytes_recvd == -1) {
+			int error = conn_sock.GetLastError();
+			if (error == Socket::SOCKLIB_ETIMEDOUT)
+			{
+				std::cout << "Server: Client timed out." << "\n";
+				connection_alive = false; // Stop handling this connection and move on to a new connection.
+				return;
 			}
-			// Expect data in a specific format --
-			//     First, the number of game objects
-			/*
-			int num_gameobjects = 0;
-			read_from_buffer(buffer, &num_gameobjects);
-			std::cout << "Reading " << num_gameobjects << " objects.\n";
-			game_objects.clear();
-			game_objects.reserve(num_gameobjects);
-			size_t buffer_offset = 0;
-
-			for (int i = 0; i < num_gameobjects; i++) {
-				GameObject* go = new GameObject;
-				buffer_offset += DeserializeGameObjectFromBytes(go,
-					&buffer[buffer_offset], sizeof(buffer) - buffer_offset);
-				game_objects.push_back(go);
+			else if (error == Socket::SOCKLIB_EWOULDBLOCK) {
+				std::cout << "Server received no message this frame.\n";
+				return;
 			}
-			*/
+			else {
+				//perror("recv()\n");
+				//exit(1);
+				std::cerr << "Server: Unexpected error!\n";
+				return;
+			}
 		}
+		else if (nbytes_recvd == 0)
+		{
+			std::cout << "Server: Nothing received. Connection no longer alive.\n";
+			connection_alive = false; // Stop handling this connection and move on to a new connection.
+			return;
+		}
+
+		std::string recv_str(buffer, nbytes_recvd);
+		std::cout << "Server: Received from client:" << recv_str << "\n";
 	}
+
+	// see what the msg was appended with to figure out what function
+	// to cal on gamemanager
 }

@@ -24,6 +24,8 @@ public:
 	{
 		return party;
 	}
+
+	void sendToServer(const char* data);
 };
 #pragma endregion
 

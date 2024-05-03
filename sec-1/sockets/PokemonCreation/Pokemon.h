@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
 
 #include "Attacks.h"
 
@@ -194,10 +195,12 @@ public:
 			for (char c : numbers)
 				temp.push_back(c);
 		}
+		temp.push_back('\0'); // add null terminator
 		
 		// convert to array
-		char** buffer = (char**)malloc(sizeof(char*) * temp.size());
-		return *buffer;
+		char* buffer = new char[temp.size()];
+		std::copy_n(temp.begin(), temp.size(), buffer);
+		return buffer;
 	}
 
 	static std::list<std::string> split(const std::string& str) {

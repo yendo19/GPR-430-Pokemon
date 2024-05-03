@@ -65,6 +65,28 @@ public:
 	Player getPlayerAtIndex(size_t index);
 
 	bool getIsServer() { return isServer; }
+
+	void update()
+	{
+		if (!isServer) return;
+
+		// do round:
+		
+		// ask clients to choose attacks
+
+
+		// wait for the clients to send attack events to the server
+
+
+		// once we have 2 events queued, it's time to move to processing events
+
+		// broadcast the changes to the clients
+
+		// check if anybody has won/lost
+
+
+	}
 };
+
 
 #pragma endregion

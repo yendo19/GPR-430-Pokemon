@@ -33,6 +33,9 @@ void GameManager::evaluateRound()
 
 GameManager::GameManager()
 {
+	connected_players = std::list<Player>();
+	current_round = 0;
+	event_queue = std::list<BattleEvent>();
 }
 
 GameManager::~GameManager()

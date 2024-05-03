@@ -26,6 +26,8 @@ public:
 	{
 		mouseX = new int(0);
 		mouseY = new int(0);
+
+		setup();
 	}
 
 	~UiManager()

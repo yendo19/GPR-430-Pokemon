@@ -10,11 +10,17 @@
 #include <iostream>
 #include <fstream>
 #include <list>
+#include <thread>
+#include <memory>
 
 class PokemonServer {
 
 private:
 	Socket* listen_sock;
+	//Socket* conn_sock;
+
+	std::thread t1;
+	bool connection_alive;
 
 public:
 	/// <summary>
@@ -28,6 +34,6 @@ public:
 
 	~PokemonServer();
 
-	int update();
+	void update(float dt, int frame_num);
 };
 #pragma endregion

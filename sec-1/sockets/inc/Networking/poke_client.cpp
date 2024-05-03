@@ -43,44 +43,37 @@ PokemonClient::~PokemonClient()
 	// socket cleans up itself I think?
 }
 
-void PokemonClient::update(float dt, int frame_num) {
-
-	// Don't need to update this module _every_ frame...
-	// Every other frame is plenty.
-	if (frame_num % 2 == 0) return;
-
-	for (Pokemon go : party.getParty()) {
-		connected_sock->Send(go.serialize(), sizeof(Pokemon));
-	}
-
-	// Do we have to send out? Then send it.
-	if (rand() % 4 != 0) {
-		std::stringstream ss;
-		ss << "LIST";
-		for (int i = 0; i < 5; i++) {
-			ss << " " << rand() % 500;
-		}
-
-		std::string to_send = ss.str();
-		connected_sock->Send(to_send.c_str(), to_send.size());
-	}
-
+void PokemonClient::update(float dt, int frame_num) 
+{
 	// Did anyone send anything back to us?
 	int nbytes_recvd = connected_sock->Recv(message_buffer, sizeof(message_buffer));
+	std::cout << "Client: Bytes received: " << nbytes_recvd << "\n";
 	if (nbytes_recvd == -1) {
 		if (connected_sock->GetLastError() == Socket::SOCKLIB_EWOULDBLOCK) {
-			to_display = "No message this frame.\n";
+			to_display = "Client revieved no message this frame.\n";
 		}
 		else {
-			std::cerr << "Unexpected error!\n";
-			abort();
+			std::cerr << "Client: Unexpected error!\n";
+			return;
 		}
 	}
 	else if (nbytes_recvd == 0) {
-		std::cerr << "Connection unexpectedly closed!\n";
-		abort();
+		std::cerr << "Client: Connection unexpectedly closed!\n";
+		return;
 	}
 	else {
+
+		// PROCESS WHAT MSG WE GOT BACK
 		to_display = std::string(message_buffer, nbytes_recvd);
 	}
+
+	std::cout << to_display << "\n";
 }
+
+void PokemonClient::sendToServer(const char* data)
+{
+	std::cout << "Client: Sending packet to server: " << data << "\n";
+	connected_sock->Send(data, std::strlen(data));
+}
+
+

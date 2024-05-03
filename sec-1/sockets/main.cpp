@@ -44,13 +44,11 @@ int main(int argc, char* argv[])
 	// create the server
 	PokemonServer server = PokemonServer("127.0.0.1", 69420);
 	
-
 	// create the client to connect to the server
-	PokemonClient client = PokemonClient("localhost", 69420);
+	PokemonClient client = PokemonClient("127.0.0.1", 69420);
 
 	// initialize UI
 	UiManager ui = UiManager();
-	ui.setup();
 
 	// init attack UI
 	std::list<Button> attacks;
@@ -68,14 +66,21 @@ int main(int argc, char* argv[])
 			continue;
 		frame_num++;
 
-		// update UI
+		std::cout << "==========================\n";
+		std::cout << "Frame " << frame_num << "\n";
+
+		// update UI every frame
 		running = ui.update(&attacks); // will return false if player gives signal to quit
 
-		// update the server
-		server.update();
+
+		// only update client and server every other frame
+		if (frame_num % 2 == 0) continue;
 
 		// update the client
 		client.update(dt, frame_num);
+
+		// update the server
+		server.update(dt, frame_num);
 	}
 
 	return 0;
