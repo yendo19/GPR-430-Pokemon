@@ -51,7 +51,7 @@ void PokemonClient::update(float dt, int frame_num)
 	int nbytes_recvd = connected_sock->Recv(message_buffer, sizeof(message_buffer));
 	if (nbytes_recvd == -1) {
 		if (connected_sock->GetLastError() == Socket::SOCKLIB_EWOULDBLOCK) {
-			to_display = "Client revieved no message this frame.\n";
+			//to_display = "Client revieved no message this frame.\n";
 		}
 		else {
 			std::cerr << "Client: Unexpected error!\n";

@@ -264,7 +264,7 @@ public:
 			atks[i] = temp;
 		}
 		Pokemon pkm(name, stoi(hp), stoi(speed), atks, "");
-
+		return pkm;
 	}
 
 	static std::string serializeMove(Pokemon pkmn, Attack atk)

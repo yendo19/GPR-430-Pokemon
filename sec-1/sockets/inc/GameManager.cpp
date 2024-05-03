@@ -143,4 +143,6 @@ Player* GameManager::getOtherPlayer(size_t index)
 
 	std::list<Player>::iterator nth = connected_players.begin();
 	std::advance(nth, index);
+
+	return &*nth;
 }
