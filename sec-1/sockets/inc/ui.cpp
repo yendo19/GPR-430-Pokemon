@@ -1,5 +1,6 @@
 #include "ui.h"
 #define SDL_STBIMAGE_IMPLEMENTATION
+#define STBI_NO_JPEG
 #include "SDL_stbimage.h"
 
 void UiManager::setup()
@@ -80,8 +81,10 @@ void UiManager::initSprites()
 {
 	for (int i = 0; i < NUM_SPRITES; i++)
 	{
-		SDL_Surface* s = STBIMG_Load(("assets/SPRITE_" + std::to_string(i)).data());
-		SDL_Texture* t = SDL_CreateTextureFromSurface(rend, s);
+		std::string path = ("assets/Sprites/SPRITE_" + std::to_string(i) + ".png");
+		SDL_Surface* s = STBIMG_Load(path.data());
+		SDL_Texture* t = STBIMG__SurfToTex(rend, s);
+		std::cout << SDL_GetError() << std::endl;
 		sprites.push_back(t);
 
 		SDL_FreeSurface(s);
