@@ -69,7 +69,7 @@ public:
             temp.readFiles(file, fileDir);
             PC.push_back(temp);
             if (!added)
-                setParty(temp);
+                setParty();
         }
     }
 
@@ -111,7 +111,7 @@ public:
             checkPC();
             break;
         case 3:
-            setParty(*(PC.begin()));
+            setParty();
             return;
         case 4:
             exit(1);
@@ -360,11 +360,14 @@ public:
     }
 
     /*Placeholder for now*/
-    void setParty(Pokemon temp)
+    void setParty()
     {
-        _myPokemon[0] = temp;
-        _myPokemon[1] = temp;
-        _myPokemon[2] = temp;
+        if (PC.size() < 3)
+            return;
+        auto itr = PC.begin();
+        _myPokemon[0] = *itr;
+        _myPokemon[1] = *(itr++);
+        _myPokemon[2] = *(itr++);
     }
 
     

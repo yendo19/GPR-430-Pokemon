@@ -50,7 +50,7 @@ void GameManager::evaluateRound()
 		{
 			if (p.client_id != move.client_id)
 			{
-				Player* attacked = getPlayerAtIndex(move.client_id);
+				Player* attacked = getPlayerAtIndex((size_t)move.client_id);
 
 				//If this is false, you have missed, skill issue
 				if (120 - p.party[p.leader].getAttackAt(move.attackIndex).getDamage() > std::rand() % 100)
@@ -73,6 +73,11 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+}
+
+bool GameManager::isReady()
+{
+	return (connected_players.size() == 2);
 }
 
 int GameManager::checkLoss()
@@ -144,7 +149,7 @@ void GameManager::updateEntry(int ownerId, int pokemonIndex, char* serializedPok
 Player* GameManager::getPlayerAtIndex(size_t index)
 {
 	std::list<Player>::iterator nth = connected_players.begin();
-	std::advance(nth, index);
+	std::advance(nth, index-1);
 
 	return &*nth;
 }

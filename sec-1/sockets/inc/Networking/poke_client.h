@@ -14,6 +14,8 @@ private:
 
 	int client_id;
 
+	static std::vector<std::string> PokemonClient::split(const std::string& s, char delim);
+
 public:
 
 	PokemonClient(const char* host, int port);

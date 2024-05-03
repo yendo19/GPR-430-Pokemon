@@ -1,4 +1,5 @@
 #include "poke_server.h"
+#include "../GameManager.h"
 
 // Source: https://stackoverflow.com/a/46931770
 std::vector<std::string> split(const std::string& s, char delim) {
@@ -43,8 +44,10 @@ void PokemonServer::acceptConnection()
 	connection_sockets.push_back(conn_sock);
 
 	// track the player that just joined
-	sendToClient(connections, "YOURID " + connections);
+	sendToClient(connections, std::string("YOURID " + connections).data());
 	connections++;
+
+
 }
 
 
@@ -56,7 +59,7 @@ PokemonServer::~PokemonServer()
 
 void PokemonServer::update(float dt, int frame_num)
 {
-	for each (Socket* conn_sock in connection_sockets)
+	for each (Socket * conn_sock in connection_sockets)
 	{
 		char buffer[4096];
 
@@ -90,9 +93,6 @@ void PokemonServer::update(float dt, int frame_num)
 		std::cout << "Server: Received from client: " << recv_str << "\n";
 		processPacket(recv_str);
 	}
-
-	// debug send some msg to client
-	sendToAllClients("Hi clients!");
 }
 
 void PokemonServer::processPacket(std::string msg)
@@ -111,6 +111,19 @@ void PokemonServer::processPacket(std::string msg)
 	if (values[1].compare("BATTLEEVENT"))
 	{
 		// do somethign....
+	}
+	else if (values[1].compare("PARTYSETUP"))
+	{
+
+		Player p;
+		p.client_id = senderId;
+		p.leader = 0;
+
+		p.party[0].deserialize(values[2], "");
+		p.party[1].deserialize(values[3], "");
+		p.party[2].deserialize(values[4], "");
+
+		GameManager::GetGameManager().trackPlayer(p);
 	}
 }
 

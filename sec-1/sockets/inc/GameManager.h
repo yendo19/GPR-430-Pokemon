@@ -45,6 +45,8 @@ public:
 	GameManager();
 	~GameManager();
 
+	bool isReady();
+
 	static void acceptAttackInput(BattleEvent battleEvent);
 
 	// CALLED BY SERVER
