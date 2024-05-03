@@ -31,7 +31,7 @@ void PokemonServer::acceptConnections()
 
 void PokemonServer::acceptConnection()
 {
-	std::cout << "Server: Waiting for connection...\n";
+	//std::cout << "Server: Waiting for connection...\n";
 	Socket* conn_sock = new Socket(std::move(listen_sock->Accept()));
 	std::cout << "Server: Got connection.\n";
 	conn_sock->SetTimeout(.1);
@@ -71,9 +71,9 @@ void PokemonServer::update(float dt, int frame_num)
 				break;
 			}
 			else {
-				//perror("recv()\n");
-				//exit(1);
 				std::cerr << "Server: Unexpected error!\n";
+				perror("recv()\n");
+				exit(1);
 				break;
 			}
 		}
@@ -93,7 +93,7 @@ void PokemonServer::update(float dt, int frame_num)
 			{
 				std::string packet = packets[i];
 				if (packet.length() == 0) continue;
-				std::cout << "Server: Received from client: " << packet << "\n";
+				//std::cout << "Server: Received from client: " << packet << "\n";
 				// PROCESS WHAT MSG WE GOT
 				processPacket(packet);
 			}
@@ -131,9 +131,9 @@ void PokemonServer::processPacket(std::string msg)
 		p.party[2] = Pokemon::deserialize(values[4]);
 
 		std::cout << "Server: Received client " << senderId << "'s party. Tracking player.\n";
-		std::cout << "Pokemon 1: " << p.party[0].getName() << '\n';
-		std::cout << "Pokemon 2: " << p.party[1].getName() << '\n';
-		std::cout << "Pokemon 3: " << p.party[2].getName() << '\n';
+		std::cout << "      Pokemon 1: " << p.party[0].getName() << '\n';
+		std::cout << "      Pokemon 2: " << p.party[1].getName() << '\n';
+		std::cout << "      Pokemon 3: " << p.party[2].getName() << "\n\n";
 		//GameManager::GetGameManager().trackPlayer(p);
 
 		msg = msg.erase(0, 2); // remove the client ID and the space
@@ -143,7 +143,7 @@ void PokemonServer::processPacket(std::string msg)
 
 void PokemonServer::sendToAllClients(std::string data)
 {
-	std::cout << "Server: Sending packet to clients: " << data << "\n";
+	//std::cout << "Server: Sending packet to clients: " << data << "\n";
 	data = "@" + data;
 	for (int i = 0; i < connection_sockets.size(); ++i)
 	{
@@ -153,7 +153,7 @@ void PokemonServer::sendToAllClients(std::string data)
 
 void PokemonServer::sendToClient(int client_id, std::string data)
 {
-	std::cout << "Server: Sending packet to client " << client_id << ": " << data << "\n";
+	//std::cout << "Server: Sending packet to client " << client_id << ": " << data << "\n";
 	data = "@" + data;
 	connection_sockets[client_id]->Send(data.c_str(), data.length());
 }

@@ -134,21 +134,20 @@ bool UiManager::update(std::list<Button>* attacks, float dt)
 {
 	SDL_GetMouseState(mouseX, mouseY);
 	bool mbUp = false;
-	while (SDL_PollEvent(&event))
+	SDL_PollEvent(&event);
+	switch (event.type)
 	{
-		switch (event.type)
+	case SDL_QUIT:
+		running = false;
+		break;
+	case SDL_MOUSEBUTTONUP:
+		if (event.button.button == SDL_BUTTON_LEFT)
 		{
-		case SDL_QUIT:
-			running = false;
-			break;
-		case SDL_MOUSEBUTTONUP:
-			if (event.button.button == SDL_BUTTON_LEFT)
-			{
-				mbUp = true;
-			}
-			break;
+			mbUp = true;
 		}
+		break;
 	}
+	
 	SDL_SetRenderDrawColor(rend, 30, 30, 30, 255);
 	SDL_RenderClear(rend);
 

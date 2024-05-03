@@ -58,7 +58,7 @@ void PokemonClient::update(float dt, int frame_num)
 		{
 			std::string packet = packets[i];
 			if (packet.length() == 0) continue;
-			std::cout << "Client: Received from server: " << packet << "\n";
+			//std::cout << "Client: Received from server: " << packet << "\n";
 			// PROCESS WHAT MSG WE GOT BACK
 			processPacket(packet);
 		}
@@ -95,7 +95,7 @@ void PokemonClient::processPacket(std::string msg)
 			if (values[1] == ("CHOOSE_ATTACKS"))
 			{
 				current_state = CHOOSE_ATTACKS;
-				std::cout << "Client: Changing state to CHOOSE_ATTACKS.\n";
+				std::cout << "\nClient: Changing state to CHOOSE_ATTACKS.\n";
 
 				// show our attack UI....
 
@@ -111,7 +111,7 @@ void PokemonClient::processPacket(std::string msg)
 			if (values[1] == ("DISPLAY_ATTACKS"))
 			{
 				current_state = DISPLAY_ATTACKS;
-				std::cout << "Client: Changing state to DISPLAY_ATTACKS.\n";
+				std::cout << "\nClient: Changing state to DISPLAY_ATTACKS.\n";
 
 				// this calls once all players have submitted their attacks
 				// at this point the client should've already updated
@@ -126,7 +126,7 @@ void PokemonClient::processPacket(std::string msg)
 			if (values[1] == ("CHOOSE_ATTACKS"))
 			{
 				current_state = CHOOSE_ATTACKS;
-				std::cout << "Client: Changing state to CHOOSE_ATTACKS.\n";
+				std::cout << "\nClient: Changing state to CHOOSE_ATTACKS.\n";
 
 				// time for players to choose attacks again
 				// after the server sends the signal to display attacks,
@@ -177,7 +177,8 @@ std::string PokemonClient::receivePacket()
 			//to_display = "Client revieved no message this frame.\n";
 		}
 		else {
-			std::cerr << "Client: Unexpected error!\n";
+			std::cerr << "Client: Unexpected error! Server likely hung up.\n";
+			exit(1);
 			return to_display;
 		}
 	}
@@ -193,7 +194,7 @@ std::string PokemonClient::receivePacket()
 
 void PokemonClient::sendToServer(std::string data)
 {
-	std::cout << "Client: Sending packet to server: " << data << "\n";
+	//std::cout << "Client: Sending packet to server: " << data << "\n";
 	data = "@" + data;
 	connected_sock->Send(data.c_str(), data.length());
 }
