@@ -13,8 +13,11 @@ BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 	return BattleEvent();
 }
 
+
+//to be called when both players have submitted a BattleEvent to the event_queue
 void GameManager::evaluateRound()
 {	
+	//Only run on the host
 	if (!getIsServer())
 		return;
 	for (BattleEvent move : event_queue)
@@ -23,9 +26,13 @@ void GameManager::evaluateRound()
 		{
 			if (p.client_id != move.client_id)
 			{
-				//connected_players[move.client_id] move.attackIndex
-				//if ()
-				//p.party[p.leader].
+				Player* attacked = getPlayerAtIndex(move.client_id);
+
+				//If this is false, you have missed, skill issue
+				if (120 - p.party[p.leader].getAttackAt(move.attackIndex).getDamage() > std::rand() % 100)
+				{
+					attacked->party[attacked->leader].applyDamage(p.party[p.leader].getAttackAt(move.attackIndex).getDamage());
+				}
 			}
 		}
 	}
@@ -93,10 +100,10 @@ void GameManager::updateEntry(int ownerId, char* serializedPokemon)
 	// updates the local copy of the chosen pokemon
 }
 
-Player GameManager::getPlayerAtIndex(size_t index)
+Player* GameManager::getPlayerAtIndex(size_t index)
 {
 	std::list<Player>::iterator nth = connected_players.begin();
 	std::advance(nth, index);
 
-	return *nth;
+	return &*nth;
 }

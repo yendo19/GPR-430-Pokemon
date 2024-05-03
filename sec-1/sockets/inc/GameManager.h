@@ -2,6 +2,7 @@
 #include <list>
 #include "../PokemonCreation/MyParty.h"
 #include "../PokemonCreation/Attacks.h"
+#include "random"
 
 struct BattleEvent
 {
@@ -62,7 +63,7 @@ public:
 		return gm;
 	}
 
-	Player getPlayerAtIndex(size_t index);
+	Player* getPlayerAtIndex(size_t index);
 
 	bool getIsServer() { return isServer; }
 
