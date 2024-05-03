@@ -59,9 +59,9 @@ void GameManager::evaluateRound()
 
 GameManager::GameManager()
 {
-	connected_players = std::list<Player>();
+	connected_players = std::vector<Player>();
 	current_round = 0;
-	event_queue = std::list<BattleEvent>();
+	event_queue = std::vector<BattleEvent>();
 	deltaTime = 0;
 }
 
@@ -196,10 +196,7 @@ void GameManager::updateEntry(int ownerId, int pokemonIndex, int damage)
 
 Player* GameManager::getPlayerAtIndex(size_t index)
 {
-	std::list<Player>::iterator nth = connected_players.begin();
-	std::advance(nth, index-1);
-
-	return &*nth;
+	return &connected_players[index];
 }
 
 Player* GameManager::getOtherPlayer(size_t index)
@@ -209,8 +206,5 @@ Player* GameManager::getOtherPlayer(size_t index)
 	else
 		index = 0;
 
-	std::list<Player>::iterator nth = connected_players.begin();
-	std::advance(nth, index);
-
-	return &*nth;
+	return &connected_players[index];
 }

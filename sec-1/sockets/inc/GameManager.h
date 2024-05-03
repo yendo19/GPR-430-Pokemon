@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <vector>
 
 class PokemonClient;
 class PokemonServer;
@@ -13,11 +14,11 @@ private:
 	PokemonClient* local_client;
 	PokemonServer* server;
 
-	std::list<Player> connected_players;
+	std::vector<Player> connected_players;
 
 	// Round-related
 	int current_round;
-	std::list<BattleEvent> event_queue;
+	std::vector<BattleEvent> event_queue;
 
 	static char* serializeBattleEvent(BattleEvent battleEvent);
 	static BattleEvent deserializeBattleEvent(char* serialized_event);

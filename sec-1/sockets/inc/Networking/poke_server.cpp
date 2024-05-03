@@ -131,6 +131,9 @@ void PokemonServer::processPacket(std::string msg)
 		p.party[2] = Pokemon::deserialize(values[4]);
 
 		std::cout << "Server: Received client " << senderId << "'s party. Tracking player.\n";
+		std::cout << "Pokemon 1: " << p.party[0].getName() << '\n';
+		std::cout << "Pokemon 2: " << p.party[1].getName() << '\n';
+		std::cout << "Pokemon 3: " << p.party[2].getName() << '\n';
 		GameManager::GetGameManager().trackPlayer(p);
 	}
 }
