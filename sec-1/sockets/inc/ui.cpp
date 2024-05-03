@@ -101,7 +101,7 @@ void UiManager::initSprites()
 void UiManager::updateTeam(Player p, bool allied, float dt)
 {
 	SDL_Rect leaderRect;
-	leaderRect.x = allied ? 250 : 350;
+	leaderRect.x = allied ? 75 : 350;
 	leaderRect.y = 100;
 	leaderRect.w = 200;
 	leaderRect.h = 200;
@@ -124,17 +124,18 @@ void UiManager::updateTeam(Player p, bool allied, float dt)
 	int partyX = allied ? 250 : 350;
 	for (int i = 0; i < 3; i++)
 	{
-		if (i == p.leader) continue;
+		if (i != p.leader)
+		{
+			SDL_Rect partyRect;
+			leaderRect.x = partyX;
+			leaderRect.y = 325;
+			leaderRect.w = 60;
+			leaderRect.h = 60;
 
-		SDL_Rect partyRect;
-		leaderRect.x = partyX;
-		leaderRect.y = 325;
-		leaderRect.w = 125;
-		leaderRect.h = 125;
+			partyX += allied ? -80 : 80;
 
-		partyX += allied ? -150 : 150;
-
-		SDL_RenderCopy(rend, sprites[p.party[p.leader].getSprite()], NULL, &partyRect);
+			SDL_RenderCopy(rend, sprites[p.party[i].getSprite()], NULL, &partyRect);
+		}
 	}
 }
 

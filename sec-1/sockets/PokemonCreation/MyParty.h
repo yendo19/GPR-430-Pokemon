@@ -366,8 +366,10 @@ public:
             return;
         auto itr = PC.begin();
         _myPokemon[0] = *itr;
-        _myPokemon[1] = *(itr++);
-        _myPokemon[2] = *(itr++);
+        itr++;
+        _myPokemon[1] = *itr;
+        itr++;
+        _myPokemon[2] = *itr;
     }
 
     
