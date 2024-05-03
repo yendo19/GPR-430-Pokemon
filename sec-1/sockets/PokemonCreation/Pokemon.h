@@ -2,17 +2,17 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
 #include <time.h>
 #include <Windows.h>
 #include <stdlib.h>
-#include "Attacks.h"
 #include <list>
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+
+#include "Attacks.h"
 
 class Pokemon
 {
@@ -210,23 +210,23 @@ public:
 		std::list<std::string> holder = split(ser);
 		std::list<std::string>::iterator it;
 		it = holder.begin();
-		std::string name = it;
+		std::string name = *it;
 		it++;
-		std::string hp = it;
+		std::string hp = *it;
 		it++;
-		std::string speed = it;
+		std::string speed = *it;
 		Attack atks[4];
 		for (int i = 0; i < 4; i++)
 		{
 			it++;
-			std::string atkName = it;
+			std::string atkName = *it;
 			it++;
-			std::string atkDmg = it;
+			std::string atkDmg = *it;
 
-			Attack temp(atkName, atkDmg);
+			Attack temp(atkName, stoi(atkDmg));
 			atks[i] = temp;
 		}
-		Pokemon pkm(name, hp, speed, atks, fileDirectory);
+		Pokemon pkm(name, stoi(hp), stoi(speed), atks, fileDirectory);
 
 	}
 
