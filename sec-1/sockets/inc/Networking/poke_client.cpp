@@ -55,9 +55,12 @@ void PokemonClient::update(float dt, int frame_num)
 	{
 		std::cout << "Client: Received from server: " << msg << "\n";
 
-		// PROCESS WHAT MSG WE GOT BACK
-		// parse the header of the packet
-		processPacket(msg);
+		std::vector<std::string> packets = split(msg, '@');
+		for each (std::string packet in packets)
+		{
+			// PROCESS WHAT MSG WE GOT BACK
+			processPacket(msg);
+		}
 	}
 		
 }
@@ -201,10 +204,11 @@ std::string PokemonClient::receivePacket()
 	return to_display;
 }
 
-void PokemonClient::sendToServer(const char* data)
+void PokemonClient::sendToServer(std::string data)
 {
 	std::cout << "Client: Sending packet to server: " << data << "\n";
-	connected_sock->Send(data, std::strlen(data));
+	data = "@" + data;
+	connected_sock->Send(data.c_str(), data.length());
 }
 
 

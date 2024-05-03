@@ -36,8 +36,8 @@ public:
 	void acceptConnections();
 	void acceptConnection();
 
-	void sendToClient(int client_id, const char* data);
-	void sendToAllClients(const char* data);
+	void sendToClient(int client_id, std::string data);
+	void sendToAllClients(std::string data);
 
 	void processPacket(std::string msg);
 

@@ -27,7 +27,7 @@ public:
 	
 	myParty* getParty();
 
-	void sendToServer(const char* data);
+	void sendToServer(std::string data);
 	std::string receivePacket();
 	void processPacket(std::string msg);
 };

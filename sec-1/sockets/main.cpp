@@ -87,9 +87,9 @@ int main(int argc, char* argv[])
 
 	// initialize UI
 	
-	UiManager ui = UiManager();
-	std::list<Button> attacks;
-
+//	UiManager ui = UiManager();
+	//std::list<Button> attacks;
+	
 	bool batteling = false;
 	//GAME LOOP
 	bool running = true;
@@ -103,7 +103,6 @@ int main(int argc, char* argv[])
 		frame_num++;
 
 
-
 		// only update client and server every other frame
 		if (frame_num % 60 != 0) continue;
 
@@ -113,6 +112,7 @@ int main(int argc, char* argv[])
 
 		GameManager::GetGameManager().update(dt, frame_num);
 
+		/*
 		if (GameManager::GetGameManager().isReady() && !batteling)
 		{
 			setupBattleUI(&ui, attacks, &client);
@@ -123,6 +123,7 @@ int main(int argc, char* argv[])
 			// update UI every frame
 			running = ui.update(&attacks, dt); // will return false if player gives signal to quit
 		}
+		*/
 	}
 
 	return 0;

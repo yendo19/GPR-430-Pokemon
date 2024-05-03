@@ -85,7 +85,14 @@ void PokemonServer::update(float dt, int frame_num)
 
 		std::string recv_str(buffer, nbytes_recvd);
 		std::cout << "Server: Received from client: " << recv_str << "\n";
-		processPacket(recv_str);
+
+		std::vector<std::string> packets = split(recv_str, '@');
+		for each (std::string packet in packets)
+		{
+			// PROCESS WHAT MSG WE GOT
+			processPacket(recv_str);
+		}
+		
 	}
 }
 
@@ -121,17 +128,19 @@ void PokemonServer::processPacket(std::string msg)
 	}
 }
 
-void PokemonServer::sendToAllClients(const char* data)
+void PokemonServer::sendToAllClients(std::string data)
 {
 	std::cout << "Server: Sending packet to clients: " << data << "\n";
+	data = "@" + data;
 	for (int i = 0; i < connection_sockets.size(); ++i)
 	{
-		connection_sockets[i]->Send(data, std::strlen(data));
+		connection_sockets[i]->Send(data.c_str(), data.length());
 	}
 }
 
-void PokemonServer::sendToClient(int client_id, const char* data)
+void PokemonServer::sendToClient(int client_id, std::string data)
 {
 	std::cout << "Server: Sending packet to client " << client_id << ": " << data << "\n";
-	connection_sockets[client_id]->Send(data, std::strlen(data));
+	data = "@" + data;
+	connection_sockets[client_id]->Send(data.c_str(), data.length());
 }
