@@ -65,7 +65,7 @@ public:
 
 	// CALLED BY CLIENTS
 	// when they receive the packet for a pokemon to update
-	void updateEntry(int ownerId,int pokemonIndex,char* serializedPokemon);
+	void updateEntry(int ownerId,int pokemonIndex,int damage);
 
 	int checkLoss();
 
