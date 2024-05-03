@@ -103,11 +103,14 @@ void GameManager::queueEvent(char* serializedBattleEvent)
 void GameManager::broadcastEventsToClients()
 {
 	// process all events that are queued (this happens at the end of each round)
-	for (int i = 0; i < event_queue.size(); ++i)
+	for each (BattleEvent btev in event_queue)
 	{
 		// determine the new health of target pokemon
-
+		getPlayerAtIndex(btev.client_id)->party[getPlayerAtIndex(btev.client_id)->leader].applyDamage(getOtherPlayer(btev.client_id)->party[getOtherPlayer(btev.client_id)->leader].getAttackAt(btev.attackIndex).getDamage());
 		// send packet to client notifying of the new pokemon states
+		
+		//getPlayerAtIndex(btev.client_id)->party[getPlayerAtIndex(btev.client_id)->leader].serialize();
+		//getOtherPlayer(btev.client_id)->party[getOtherPlayer(btev.client_id)->leader].serialize();
 	}
 }
 
@@ -129,4 +132,15 @@ Player* GameManager::getPlayerAtIndex(size_t index)
 	std::advance(nth, index);
 
 	return &*nth;
+}
+
+Player* GameManager::getOtherPlayer(size_t index)
+{
+	if (index == 0)
+		index = 1;
+	else
+		index = 0;
+
+	std::list<Player>::iterator nth = connected_players.begin();
+	std::advance(nth, index);
 }

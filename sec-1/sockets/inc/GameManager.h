@@ -65,6 +65,8 @@ public:
 
 	Player* getPlayerAtIndex(size_t index);
 
+	Player* getOtherPlayer(size_t index);
+
 	bool getIsServer() { return isServer; }
 
 	void update()
