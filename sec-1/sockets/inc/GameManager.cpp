@@ -153,8 +153,9 @@ void GameManager::acceptAttackInput(BattleEvent battleEvent)
 	// called whenever the server receives a connection
 void GameManager::trackPlayer(Player player)
 {
+	if (connected_players.size() >= 2) return; // stop tracking after 2
 	connected_players.push_back(player);
-	std::cout << "Server: Tracked players: " << connected_players.size() << "\n";
+	std::cout << "Tracked players: " << connected_players.size() << "\n";
 }
 
 // CALLED BY CLIENT
