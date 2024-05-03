@@ -169,7 +169,7 @@ public:
             std::cin >> temp;
             atks[i].setName(temp);
             //NEED ATTACK DAMAGE LIMITER/BALANCE SOMEHOW
-            std::cout << "Enter attack " << i+1 << " Damage (10-100): ";
+            std::cout << "Enter attack " << i+1 << " Damage (10-100). The higher the damage the higher the chance of missing!: ";
             std::cin >> temp;
             while (!possible)
             {
