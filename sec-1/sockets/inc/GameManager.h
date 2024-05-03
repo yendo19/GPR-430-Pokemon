@@ -21,7 +21,7 @@ private:
 	std::vector<BattleEvent> event_queue;
 
 	static char* serializeBattleEvent(BattleEvent battleEvent);
-	static BattleEvent deserializeBattleEvent(char* serialized_event);
+	static BattleEvent deserializeBattleEvent(const char* serialized_event);
 
 	void evaluateRound();
 
@@ -46,7 +46,7 @@ public:
 
 	// CALLED BY SERVER
 	// this should be called whenever the server receives an event
-	void queueEvent(char* serializedBattleEvent);
+	void queueEvent(const char* serializedBattleEvent);
 
 	// CALLED BY SERVER
 	void broadcastEventsToClients();

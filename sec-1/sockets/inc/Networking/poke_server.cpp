@@ -117,6 +117,8 @@ void PokemonServer::processPacket(std::string msg)
 	if (values[1] == ("BATTLEEVENT"))
 	{
 		// do somethign....
+		const char* buff = values[2].c_str();
+		GameManager::GetGameManager().queueEvent(buff);
 	}
 	
 	if (values[1] == ("PARTYSETUP"))

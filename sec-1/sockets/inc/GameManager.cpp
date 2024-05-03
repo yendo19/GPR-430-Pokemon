@@ -17,7 +17,7 @@ char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
 	return arr;
 }
 
-BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
+BattleEvent GameManager::deserializeBattleEvent(const char* serialized_event)
 {
 	std::string id;
 	std::string atkInd;
@@ -148,9 +148,8 @@ void GameManager::acceptAttackInput(BattleEvent battleEvent)
 {
 	std::cout << "Attack selected by " << battleEvent.client_id << ". AttackIndex: " << battleEvent.attackIndex << '\n';
 	//GetGameManager().broadcastEventsToClients();
-	std::string msg = serializeBattleEvent(battleEvent);
+	std::string msg = "" + std::to_string(battleEvent.client_id) + " " + serializeBattleEvent(battleEvent);
 	GetGameManager().local_client->sendToServer(msg);
-	//GetGameManager().queueEvent(serializeBattleEvent(battleEvent));
 }
 
 // CALLED BY SERVER
@@ -174,7 +173,7 @@ void GameManager::sendEventToServer(BattleEvent battleEvent)
 
 // CALLED BY SERVER
 // this should be called whenever the server receives an event
-void GameManager::queueEvent(char* serializedBattleEvent)
+void GameManager::queueEvent(const char* serializedBattleEvent)
 {
 	std::cout << "Server: Queueing event: " << serializeBattleEvent << '\n';
 	BattleEvent battleEvent = deserializeBattleEvent(serializedBattleEvent);

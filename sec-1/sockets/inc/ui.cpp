@@ -83,8 +83,13 @@ void UiManager::initSprites()
 	{
 		std::string path = ("assets/Sprites/SPRITE_" + std::to_string(i) + ".png");
 		SDL_Surface* s = STBIMG_Load(path.data());
+		SDL_Texture* t = SDL_CreateTextureFromSurface(rend, s);
+		/*
+		std::string path = ("assets/Sprites/SPRITE_" + std::to_string(i) + ".png");
+		SDL_Surface* s = STBIMG_Load(path.data());
 		SDL_Texture* t = STBIMG__SurfToTex(rend, s);
 		std::cout << SDL_GetError() << std::endl;
+		*/
 		sprites.push_back(t);
 
 		SDL_FreeSurface(s);
