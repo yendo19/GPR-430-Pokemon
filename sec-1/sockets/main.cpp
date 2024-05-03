@@ -1,6 +1,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <numeric>
+#include <algorithm>
+#include <random>
 
 #include <stdlib.h>
 #include <filesystem>
@@ -56,9 +59,28 @@ int main(int argc, char* argv[])
 	// initialize UI
 	UiManager ui = UiManager();
 
+	ui.initSprites();
+
+	std::vector<int> spriteIndexes(16);
+	std::iota(std::begin(spriteIndexes), std::end(spriteIndexes), 0);
+
+	auto rng = std::default_random_engine{};
+	std::shuffle(std::begin(spriteIndexes), std::end(spriteIndexes), rng);
+
+	if (gm.getIsServer())
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				gm.getPlayerAtIndex(i)->party[j].setSprite(i);
+			}
+		}
+	}
+
 	// init attack UI
 	std::list<Button> attacks;
-	ui.setupAttacks(&attacks, client.getParty().getPokemonInPartyAt(0));
+	ui.setupActive(&attacks, client.getParty().getPokemonInPartyAt(0));
 
 
 	//GAME LOOP
@@ -73,7 +95,7 @@ int main(int argc, char* argv[])
 		frame_num++;
 
 		// update UI every frame
-		running = ui.update(&attacks); // will return false if player gives signal to quit
+		running = ui.update(&attacks, dt); // will return false if player gives signal to quit
 
 
 		// only update client and server every other frame

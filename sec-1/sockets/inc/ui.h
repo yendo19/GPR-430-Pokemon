@@ -6,9 +6,11 @@
 #include <time.h>
 #include <iostream>
 #include "GameManager.h"
+#include <vector>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const int NUM_SPRITES = 16;
 
 class UiManager {
 private:
@@ -20,6 +22,8 @@ private:
 	SDL_Window* wind;
 	SDL_Renderer* rend;
 	TTF_Font* encode;
+
+	std::vector<SDL_Texture*> sprites;
 
 public:
 	UiManager()
@@ -38,7 +42,12 @@ public:
 
 	void setup();
 
-	void setupAttacks(std::list<Button>* attacks, Pokemon active);
+	void setupActive(std::list<Button>* attacks, Pokemon active);
 
-	bool update(std::list<Button>* attacks);
+	void initSprites();
+
+	bool update(std::list<Button>* attacks, float dt);
+
+	void updateTeam(Player p, bool allied, float dt);
+
 };
