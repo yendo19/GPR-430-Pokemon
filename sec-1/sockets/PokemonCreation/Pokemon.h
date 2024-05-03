@@ -21,7 +21,7 @@ private:
 	int _currentHealth;
 	int _maxHealth;
 	int _speed;
-	attacks _myAttacks[4];
+	Attack _myAttacks[4];
 	std::string fileDir;
 
 public:
@@ -34,7 +34,7 @@ public:
 		fileDir = "";
 	}
 
-	Pokemon(std::string name, int hp, int speed , attacks atks[4], std::string file)
+	Pokemon(std::string name, int hp, int speed , Attack atks[4], std::string file)
 	{
 		_name = name;
 		_maxHealth = hp;
@@ -68,7 +68,7 @@ public:
 	int getHealth() { return _currentHealth; }
 	int getSpeed() { return _speed; }
 	int getMaxHealth() { return _maxHealth; }
-	attacks getAttackAt(int i) { return _myAttacks[i]; }
+	Attack getAttackAt(int i) { return _myAttacks[i]; }
 #pragma endregion
 
 	
@@ -81,7 +81,7 @@ public:
 		if (output.is_open() && output.good())
 		{
 			output << _name << std::endl << _maxHealth << std::endl << _speed << std::endl;
-			for each (attacks atk in _myAttacks)
+			for each (Attack atk in _myAttacks)
 			{
 				output << atk.getName() << std::endl << atk.getDamage() << std:: endl;
 			}
@@ -127,7 +127,7 @@ public:
 		int i = 0;
 		std::cout << _name << "    HP: " << _maxHealth << "    Speed: " << _speed << std::endl;
 		std::cout << "Attacks:\n";
-		for each (attacks atk in _myAttacks)
+		for each (Attack atk in _myAttacks)
 		{
 			std::cout << "    " << i << ": " << atk.getName() << std::setw(50) << std::right<< "     DMG: "  <<atk.getDamage() << std::endl;
 			i++;
@@ -175,7 +175,7 @@ public:
 			temp.push_back(c);
 
 
-		for (attacks atk : _myAttacks)
+		for (Attack atk : _myAttacks)
 		{
 			temp.push_back(':');
 			for (char c : atk.getName())
@@ -228,7 +228,7 @@ public:
 		std::cout << data;
 	}
 
-	static std::string serializeMove(Pokemon pkmn, attacks atk)
+	static std::string serializeMove(Pokemon pkmn, Attack atk)
 	{
 		std::string temp;
 		std::stringstream num;

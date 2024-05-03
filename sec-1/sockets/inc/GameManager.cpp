@@ -3,6 +3,7 @@
 char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
 {
 	// to be implemented
+	return nullptr;
 }
 
 BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
@@ -10,13 +11,15 @@ BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 	// to be implemented
 
 	// sample
+	Attack attack = Attack();
 	BattleEvent battleEvent =
 	{
-		0, //int target_client_id;
-		1, //int target_pokemon;
-		-10, //int health_change;
+		0,		//target_client_id
+		1,		//target_pokemon
+		attack,	//attack
 	};
 
+	return battleEvent;
 }
 
 // CALLED BY SERVER

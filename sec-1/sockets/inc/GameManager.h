@@ -1,11 +1,13 @@
+#pragma once
 #include <list>
 #include "../PokemonCreation/MyParty.h"
+#include "../PokemonCreation/Attacks.h"
 
 struct BattleEvent
 {
 	int target_client_id;
 	int target_pokemon;
-	int health_change;
+	Attack attack;
 };
 
 struct Player
@@ -46,3 +48,5 @@ public:
 	// when they receive the packet for a pokemon to update
 	void updateEntry(int ownerId, char* serializedPokemon);
 };
+
+#pragma endregion

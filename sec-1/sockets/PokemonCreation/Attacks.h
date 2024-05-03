@@ -12,21 +12,21 @@
 #include <iostream>
 #include <fstream>
 
-class attacks
+class Attack
 {
 public:
-	attacks()
+	Attack()
 	{
 		_atkName = "";
 		_damage = 0;
 	}
 
-	attacks(std::string name, int dmg)
+	Attack(std::string name, int dmg)
 	{
 		_atkName = name;
 		_damage = dmg;
 	}
-	~attacks()
+	~Attack()
 	{
 
 	}

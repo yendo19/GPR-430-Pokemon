@@ -132,7 +132,7 @@ public:
         std::string temp;
         int hp = 201, speed, k = 0;;
         bool possible = false;
-        attacks atks[4];
+        Attack atks[4];
 
         std::cout << "Enter Pokemon Name: ";
         std::cin >> name;
@@ -209,7 +209,7 @@ public:
         std::cout << "*******************************************************\n\n";
         
 
-        for each (attacks atk in atks)
+        for each (Attack atk in atks)
         {
             std::cout << "   Attack Name: " << atk.getName() << "     Attack Damage: " << atk.getDamage() << std::endl;
             k++;
@@ -353,7 +353,7 @@ public:
 
 #pragma endregion
 
-    void createPokemon(std::string name, int hp,int speed,attacks atk[4])
+    void createPokemon(std::string name, int hp,int speed, Attack atk[4])
     {
         Pokemon temp(name,hp,speed,atk,fileDir);
         temp.CreateFiles();
