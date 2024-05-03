@@ -239,6 +239,7 @@ public:
 		}
 		Pokemon pkm(name, stoi(hp), stoi(speed), atks, fileDirectory);
 
+		return pkm;
 	}
 
 	static Pokemon deserialize(std::string ser)

@@ -8,7 +8,7 @@
 char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
 {
 	// to be implemented
-	std::string temp = std::to_string(battleEvent.client_id) + ':' + std::to_string(battleEvent.attackIndex);
+	std::string temp = "BATTLEEVENT:" + std::to_string(battleEvent.client_id) + ':' + std::to_string(battleEvent.attackIndex);
 	const int length = temp.length();
 
 	char* arr = new char[length + 1];
@@ -22,14 +22,10 @@ BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 	std::string id;
 	std::string atkInd;
 	int size = sizeof(serialized_event);
-	for (int i = 0; i < size/4; i++)
-	{
-		while (serialized_event[i] != ':')
-		{
-			id += serialized_event[i];
-		}
-		atkInd = serialized_event[i];
-	}
+	std::string str(serialized_event, sizeof(serialized_event));
+	std::vector<std::string> thing = split(str,':');
+	thing.at(1) = id;
+	thing.at(2) = atkInd;
 
 	BattleEvent temp;
 	temp.attackIndex = std::stoi(atkInd);
@@ -48,24 +44,16 @@ void GameManager::evaluateRound()
 	for (BattleEvent move : event_queue)
 	{
 		// ask the server to send the msg to all clients
-		server->sendToAllClients(serializeBattleEvent(move));
-
-		/*
-		for (Player p : connected_players)
+		//if (120 - p.party[p.leader].getAttackAt(move.attackIndex).getDamage() > std::rand() % 100)
+		if(120-getPlayerAtIndex(move.client_id)->party[getPlayerAtIndex(move.client_id)->leader].getAttackAt(move.attackIndex).getDamage() > std::rand() % 100)
+			server->sendToAllClients(serializeBattleEvent(move));
+		else
 		{
-			if (p.client_id != move.client_id)
-			{
-				Player* attacked = getPlayerAtIndex(move.client_id);
-
-				//If this is false, you have missed, skill issue
-				if (120 - p.party[p.leader].getAttackAt(move.attackIndex).getDamage() > std::rand() % 100)
-				{
-					attacked->party[attacked->leader].applyDamage(p.party[p.leader].getAttackAt(move.attackIndex).getDamage());
-					updateEntry(attacked->client_id, attacked->leader, attacked->party[attacked->leader].serialize());
-				}
-			}
+			BattleEvent newEvent;
+			newEvent.client_id = 9;
+			newEvent.attackIndex = 9;
+			server->sendToAllClients(serializeBattleEvent(newEvent));
 		}
-		*/
 	}
 }
 
@@ -80,6 +68,7 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
 }
+
 
 void GameManager::update(float dt, int frame_num)
 {
@@ -128,6 +117,10 @@ void GameManager::update(float dt, int frame_num)
 		//index at i lost
 	}
 
+
+bool GameManager::isReady()
+{
+	return (connected_players.size() == 2);
 }
 
 int GameManager::checkLoss()
@@ -191,20 +184,17 @@ void GameManager::broadcastEventsToClients()
 
 // CALLED BY CLIENTS
 // when they receive the packet for a pokemon to update
-void GameManager::updateEntry(int ownerId, int pokemonIndex, char* serializedPokemon)
+void GameManager::updateEntry(int ownerId, int pokemonIndex, int damage)
 {
-	// deserialized the pokemon
-	Pokemon temp;
-	std::string str(serializedPokemon, sizeof(serializedPokemon));
-	temp.deserialize(str);
-	// updates the local copy of the chosen pokemon
-	getPlayerAtIndex(ownerId)->party[pokemonIndex] = temp;
+	//apply damage to the other pokemon 
+	getOtherPlayer(ownerId)->party[pokemonIndex].applyDamage(damage);
+
 }
 
 Player* GameManager::getPlayerAtIndex(size_t index)
 {
 	std::list<Player>::iterator nth = connected_players.begin();
-	std::advance(nth, index);
+	std::advance(nth, index-1);
 
 	return &*nth;
 }
@@ -220,4 +210,17 @@ Player* GameManager::getOtherPlayer(size_t index)
 	std::advance(nth, index);
 
 	return &*nth;
+}
+
+// Source: https://stackoverflow.com/a/46931770
+std::vector<std::string> split(const std::string& s, char delim) {
+	std::vector<std::string> result;
+	std::stringstream ss(s);
+	std::string item;
+
+	while (getline(ss, item, delim)) {
+		result.push_back(item);
+	}
+
+	return result;
 }

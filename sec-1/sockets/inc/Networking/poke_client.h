@@ -1,9 +1,16 @@
 #pragma once
 #include <string>
 
+
 class Socket;
 class myParty;
 enum State;
+
+//#include "../../inc/GameManager.h"
+//#include "../../socklib.h"
+//#include "../../PokemonCreation/Pokemon.h"
+//#include "../../PokemonCreation/MyParty.h"
+
 
 class PokemonClient
 {
@@ -16,6 +23,10 @@ private:
 	int client_id;
 
 	State current_state;
+	myParty party;
+	int client_id;
+
+	static std::vector<std::string> PokemonClient::split(const std::string& s, char delim);
 
 public:
 

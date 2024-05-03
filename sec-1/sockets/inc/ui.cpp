@@ -99,6 +99,20 @@ void UiManager::updateTeam(Player p, bool allied, float dt)
 	leaderRect.h = 200;
 	SDL_RenderCopy(rend, sprites[p.party[p.leader].getSprite()], NULL, &leaderRect);
 
+	SDL_Surface* surfaceMessage = SDL_CreateRGBSurface(0, 100, 50, 32, 0, 0, 0, 0);
+
+	surfaceMessage = TTF_RenderText_Solid(encode, std::to_string(p.party[p.leader].getHealth()).c_str(), SDL_Color{ 255, 0, 0, 255 });
+
+	SDL_Texture* leaderHP = SDL_CreateTextureFromSurface(rend, surfaceMessage);
+
+	SDL_Rect leaderHPRect;
+	leaderHPRect.x = allied ? 500 : 0;
+	leaderHPRect.y = allied ? 320 : 0;
+	leaderHPRect.w = 100;
+	leaderHPRect.h = 80;
+
+	SDL_RenderCopy(rend, leaderHP, NULL, &leaderHPRect);
+
 	int partyX = allied ? 250 : 350;
 	for (int i = 0; i < 3; i++)
 	{
@@ -147,8 +161,9 @@ bool UiManager::update(std::list<Button>* attacks, float dt)
 
 	for (int i = 0; i < 2; i++)
 	{
-		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex(0)), false, dt);
-		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex(1)), true, dt);
+		if (!GameManager::GetGameManager().getIsServer()) continue;
+		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex((size_t)0)), false, dt);
+		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex((size_t)1)), true, dt);
 	}
 
 	SDL_RenderPresent(rend);

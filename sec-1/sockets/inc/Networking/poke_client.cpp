@@ -17,7 +17,6 @@ PokemonClient::PokemonClient(const char* host, int port)
 	connected_sock = new Socket(Socket::Family::INET, Socket::Type::STREAM);
 	connected_sock->Connect(addr);
 	connected_sock->SetNonBlockingMode(true);
-
 	std::cout << "Client: Connected to server!\n";
 	current_state = CONNECTED;
 }
@@ -49,19 +48,17 @@ PokemonClient::~PokemonClient()
 
 void PokemonClient::update(float dt, int frame_num) 
 {
-	sendToServer("Hi server!");
-
 	std::string msg = receivePacket();
 
 	if (msg.length() > 0)
 	{
 		std::cout << "Client: Received from server: " << msg << "\n";
+
+		// PROCESS WHAT MSG WE GOT BACK
+		// parse the header of the packet
+		processPacket(msg);
 	}
 		
-
-	// PROCESS WHAT MSG WE GOT BACK
-	// parse the header of the packet
-	processPacket(msg);
 }
 
 void PokemonClient::processPacket(std::string msg)
@@ -129,12 +126,50 @@ void PokemonClient::processPacket(std::string msg)
 			}
 		}
 		break;
+
+		client_id = std::stoi(values[1]);
+		std::cout << "Client: Got my ID: " << client_id << "\n";
+		std::string outmsg = std::to_string(client_id) + " PARTYSETUP " + party.getPokemonInPartyAt(0).serialize() + " " + party.getPokemonInPartyAt(1).serialize() + " " + party.getPokemonInPartyAt(2).serialize();
+		sendToServer(outmsg.data());
+
 	}
 	
 
 	if (values[0].compare("BATTLEEVENT"))
 	{
-		
+		std::string id = values[1], attack = values[2];
+		if (id == "9")
+		{
+			//missed
+		}
+		else
+		{
+			GameManager::GetGameManager().updateEntry(std::stoi(id), GameManager::GetGameManager().getOtherPlayer(std::stoi(id))->leader, GameManager::GetGameManager().getPlayerAtIndex(std::stoi(id))->party[GameManager::GetGameManager().getPlayerAtIndex(std::stoi(id))->leader].getAttackAt(std::stoi(attack)).getDamage());
+		}
+	}
+
+	else if (values[0].compare("PARTYSETUP"))
+	{
+
+		Player p_server;
+		p_server.client_id = 0;
+		p_server.leader = 0;
+
+		p_server.party[0].deserialize(values[1], "");
+		p_server.party[1].deserialize(values[2], "");
+		p_server.party[2].deserialize(values[3], "");
+
+		GameManager::GetGameManager().trackPlayer(p_server);
+
+		Player p_local;
+		p_local.client_id = 1;
+		p_local.leader = 0;
+
+		p_local.party[0] = party.getPokemonInPartyAt(0);
+		p_local.party[1] = party.getPokemonInPartyAt(1);
+		p_local.party[2] = party.getPokemonInPartyAt(2);
+
+		GameManager::GetGameManager().trackPlayer(p_local);
 	}
 }
 
