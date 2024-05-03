@@ -63,7 +63,7 @@ public:
 
 	// CALLED BY CLIENTS
 	// when they receive the packet for a pokemon to update
-	void updateEntry(int ownerId, char* serializedPokemon);
+	void updateEntry(int ownerId,int pokemonIndex,char* serializedPokemon);
 
 	static GameManager & GetGameManager() {
 		static GameManager gm;
@@ -71,6 +71,8 @@ public:
 	}
 
 	Player* getPlayerAtIndex(size_t index);
+
+	Player* getOtherPlayer(size_t index);
 
 	bool getIsServer() { return isServer; }
 

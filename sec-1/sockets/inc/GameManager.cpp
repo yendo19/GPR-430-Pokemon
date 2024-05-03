@@ -3,14 +3,34 @@
 char* GameManager::serializeBattleEvent(BattleEvent battleEvent)
 {
 	// to be implemented
-	return nullptr;
+	std::string temp = std::to_string(battleEvent.client_id) + ':' + std::to_string(battleEvent.attackIndex);
+	const int length = temp.length();
+
+	char* arr = new char[length + 1];
+	std::strcpy(arr, temp.c_str());
+
+	return arr;
 }
 
 BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 {
-	// to be implemented
+	std::string id;
+	std::string atkInd;
+	int size = sizeof(serialized_event);
+	for (int i = 0; i < size/4; i++)
+	{
+		while (serialized_event[i] != ':')
+		{
+			id += serialized_event[i];
+		}
+		atkInd = serialized_event[i];
+	}
 
-	return BattleEvent();
+	BattleEvent temp;
+	temp.attackIndex = std::stoi(atkInd);
+	temp.client_id = std::stoi(id);
+
+	return temp;
 }
 
 
@@ -83,21 +103,27 @@ void GameManager::queueEvent(char* serializedBattleEvent)
 void GameManager::broadcastEventsToClients()
 {
 	// process all events that are queued (this happens at the end of each round)
-	for (int i = 0; i < event_queue.size(); ++i)
+	for each (BattleEvent btev in event_queue)
 	{
 		// determine the new health of target pokemon
-
+		getPlayerAtIndex(btev.client_id)->party[getPlayerAtIndex(btev.client_id)->leader].applyDamage(getOtherPlayer(btev.client_id)->party[getOtherPlayer(btev.client_id)->leader].getAttackAt(btev.attackIndex).getDamage());
 		// send packet to client notifying of the new pokemon states
+		
+		//getPlayerAtIndex(btev.client_id)->party[getPlayerAtIndex(btev.client_id)->leader].serialize();
+		//getOtherPlayer(btev.client_id)->party[getOtherPlayer(btev.client_id)->leader].serialize();
 	}
 }
 
 // CALLED BY CLIENTS
 // when they receive the packet for a pokemon to update
-void GameManager::updateEntry(int ownerId, char* serializedPokemon)
+void GameManager::updateEntry(int ownerId, int pokemonIndex, char* serializedPokemon)
 {
 	// deserialized the pokemon
-
+	Pokemon temp;
+	std::string str(serializedPokemon, sizeof(serializedPokemon));
+	temp.deserialize(str);
 	// updates the local copy of the chosen pokemon
+	getPlayerAtIndex(ownerId)->party[pokemonIndex] = temp;
 }
 
 Player* GameManager::getPlayerAtIndex(size_t index)
@@ -106,4 +132,15 @@ Player* GameManager::getPlayerAtIndex(size_t index)
 	std::advance(nth, index);
 
 	return &*nth;
+}
+
+Player* GameManager::getOtherPlayer(size_t index)
+{
+	if (index == 0)
+		index = 1;
+	else
+		index = 0;
+
+	std::list<Player>::iterator nth = connected_players.begin();
+	std::advance(nth, index);
 }
