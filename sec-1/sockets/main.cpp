@@ -18,10 +18,6 @@
 
 #include "Networking/server.h"
 #include "Networking/client.h"
-
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-
 #include "inc/ui.h"
 
 SDL_Window* wind;
