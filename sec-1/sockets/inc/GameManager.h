@@ -1,11 +1,11 @@
 #pragma once
 #include <list>
 
-class PokemonClient;
-class PokemonServer;
-struct Player;
-struct BattleEvent;
-enum State;
+extern class PokemonClient;
+extern class PokemonServer;
+extern struct Player;
+extern struct BattleEvent;
+extern enum State;
 
 class GameManager
 {

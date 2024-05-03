@@ -1,16 +1,9 @@
 #pragma once
 #include <string>
 
-
-class Socket;
-class myParty;
-enum State;
-
-//#include "../../inc/GameManager.h"
-//#include "../../socklib.h"
-//#include "../../PokemonCreation/Pokemon.h"
-//#include "../../PokemonCreation/MyParty.h"
-
+extern class Socket;
+extern class myParty;
+extern enum State;
 
 class PokemonClient
 {
@@ -23,10 +16,8 @@ private:
 	int client_id;
 
 	State current_state;
-	myParty party;
+	myParty* party;
 	int client_id;
-
-	static std::vector<std::string> PokemonClient::split(const std::string& s, char delim);
 
 public:
 
@@ -36,7 +27,7 @@ public:
 	void initParty();
 	void update(float dt, int frame_num);
 	
-	myParty getParty();
+	myParty* getParty();
 
 	void sendToServer(const char* data);
 	std::string receivePacket();

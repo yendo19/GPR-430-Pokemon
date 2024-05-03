@@ -9,7 +9,7 @@
 #include <fstream>
 #include <list>
 
-enum State;
+extern enum State;
 
 class PokemonServer {
 

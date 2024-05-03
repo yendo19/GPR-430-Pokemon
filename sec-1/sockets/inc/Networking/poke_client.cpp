@@ -3,6 +3,7 @@
 #include "../../socklib.h"
 #include "../../PokemonCreation/Pokemon.h"
 #include "../Extras.h"
+#include "../GameManager.h"
 
 PokemonClient::PokemonClient(const char* host, int port)
 {
@@ -35,9 +36,9 @@ void PokemonClient::initParty()
 	party->Update();
 }
 
-myParty PokemonClient::getParty()
+myParty* PokemonClient::getParty()
 {
-	return *party;
+	return party;
 }
 
 PokemonClient::~PokemonClient()
@@ -127,11 +128,12 @@ void PokemonClient::processPacket(std::string msg)
 		}
 		break;
 
+		
 		client_id = std::stoi(values[1]);
 		std::cout << "Client: Got my ID: " << client_id << "\n";
-		std::string outmsg = std::to_string(client_id) + " PARTYSETUP " + party.getPokemonInPartyAt(0).serialize() + " " + party.getPokemonInPartyAt(1).serialize() + " " + party.getPokemonInPartyAt(2).serialize();
+		std::string outmsg = std::to_string(client_id) + " PARTYSETUP " + party->getPokemonInPartyAt(0).serialize() + " " + party->getPokemonInPartyAt(1).serialize() + " " + party->getPokemonInPartyAt(2).serialize();
 		sendToServer(outmsg.data());
-
+		
 	}
 	
 
@@ -165,9 +167,10 @@ void PokemonClient::processPacket(std::string msg)
 		p_local.client_id = 1;
 		p_local.leader = 0;
 
-		p_local.party[0] = party.getPokemonInPartyAt(0);
-		p_local.party[1] = party.getPokemonInPartyAt(1);
-		p_local.party[2] = party.getPokemonInPartyAt(2);
+
+		p_local.party[0] = party->getPokemonInPartyAt(0);
+		p_local.party[1] = party->getPokemonInPartyAt(1);
+		p_local.party[2] = party->getPokemonInPartyAt(2);
 
 		GameManager::GetGameManager().trackPlayer(p_local);
 	}

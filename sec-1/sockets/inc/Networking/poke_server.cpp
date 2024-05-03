@@ -1,5 +1,5 @@
 #include "poke_server.h"
-
+#include "../GameManager.h"
 #include "../Extras.h"
 
 PokemonServer::PokemonServer(const char* host, int port)
