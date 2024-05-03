@@ -12,8 +12,11 @@
 #include <iomanip>
 #include <sstream>
 #include <algorithm>
+#include <vector>
 
 #include "Attacks.h"
+
+extern std::vector<std::string> split(const std::string& s, char delim);
 
 class Pokemon
 {
@@ -36,7 +39,7 @@ public:
 		fileDir = "";
 	}
 
-	Pokemon(std::string name, int hp, int speed , Attack atks[4], std::string file)
+	Pokemon(std::string name, int hp, int speed , Attack atks[4], std::string file = "")
 	{
 		_name = name;
 		_maxHealth = hp;
@@ -203,68 +206,28 @@ public:
 		return buffer;
 	}
 
-	static std::list<std::string> split(const std::string& str) {
-		std::list<std::string> temp;
-		std::istringstream iss(str);
-		std::string token;
-
-		while (std::getline(iss, token, ':')) {
-			temp.push_back(token);
-		}
-
-		return temp;
-	}
-
-	static Pokemon deserialize(std::string ser, std::string fileDirectory)
-	{
-		int count = 0;
-		std::list<std::string> holder = split(ser);
-		std::list<std::string>::iterator it;
-		it = holder.begin();
-		std::string name = *it;
-		it++;
-		std::string hp = *it;
-		it++;
-		std::string speed = *it;
-		Attack atks[4];
-		for (int i = 0; i < 4; i++)
-		{
-			it++;
-			std::string atkName = *it;
-			it++;
-			std::string atkDmg = *it;
-
-			Attack temp(atkName, stoi(atkDmg));
-			atks[i] = temp;
-		}
-		Pokemon pkm(name, stoi(hp), stoi(speed), atks, fileDirectory);
-
-		return pkm;
-	}
-
 	static Pokemon deserialize(std::string ser)
 	{
 		int count = 0;
-		std::list<std::string> holder = split(ser);
-		std::list<std::string>::iterator it;
-		it = holder.begin();
-		std::string name = *it;
-		it++;
-		std::string hp = *it;
-		it++;
-		std::string speed = *it;
+		std::vector<std::string> holder = split(ser.data(), ':');
+		std::string name = holder[0];
+		std::string hp = holder[2];
+		std::string speed = holder[3];
 		Attack atks[4];
+		int index = 4;
 		for (int i = 0; i < 4; i++)
 		{
-			it++;
-			std::string atkName = *it;
-			it++;
-			std::string atkDmg = *it;
+			std::string atkName = holder[index];
+			index++;
+			std::string atkDmg = holder[index];
 
 			Attack temp(atkName, stoi(atkDmg));
 			atks[i] = temp;
+
+			index++;
 		}
-		Pokemon pkm(name, stoi(hp), stoi(speed), atks, "");
+		Pokemon pkm(name, stoi(hp), stoi(speed), atks);
+
 		return pkm;
 	}
 

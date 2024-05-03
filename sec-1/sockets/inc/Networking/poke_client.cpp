@@ -159,9 +159,9 @@ void PokemonClient::processPacket(std::string msg)
 		p_server.client_id = 0;
 		p_server.leader = 0;
 
-		p_server.party[0].deserialize(values[1], "");
-		p_server.party[1].deserialize(values[2], "");
-		p_server.party[2].deserialize(values[3], "");
+		p_server.party[0] = Pokemon::deserialize(values[1]);
+		p_server.party[1] = Pokemon::deserialize(values[2]);
+		p_server.party[2] = Pokemon::deserialize(values[3]);
 
 		GameManager::GetGameManager().trackPlayer(p_server);
 
