@@ -17,7 +17,7 @@ class PokemonServer {
 
 private:
 	Socket* listen_sock;
-	//Socket* conn_sock;
+	Socket* conn_sock;
 
 	std::thread t1;
 	bool connection_alive;
@@ -35,5 +35,7 @@ public:
 	~PokemonServer();
 
 	void update(float dt, int frame_num);
+	void acceptConnections();
+	void sendToClients(const char* data);
 };
 #pragma endregion

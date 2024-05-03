@@ -47,6 +47,8 @@ int main(int argc, char* argv[])
 	// create the client to connect to the server
 	PokemonClient client = PokemonClient("127.0.0.1", 69420);
 
+	server.acceptConnections();
+
 	// initialize UI
 	UiManager ui = UiManager();
 
@@ -66,21 +68,24 @@ int main(int argc, char* argv[])
 			continue;
 		frame_num++;
 
-		std::cout << "==========================\n";
-		std::cout << "Frame " << frame_num << "\n";
-
 		// update UI every frame
 		running = ui.update(&attacks); // will return false if player gives signal to quit
 
 
 		// only update client and server every other frame
-		if (frame_num % 2 == 0) continue;
+		if (frame_num % 60 != 0) continue;
+
+
+		std::cout << "==========================\n";
+		std::cout << "Frame " << frame_num << "\n";
+
+		// update the server
+		server.update(dt, frame_num);
 
 		// update the client
 		client.update(dt, frame_num);
 
-		// update the server
-		server.update(dt, frame_num);
+		
 	}
 
 	return 0;
