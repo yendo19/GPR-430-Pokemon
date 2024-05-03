@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "string.h"
+
 #include <time.h>
 #include <Windows.h>
 #include <stdlib.h>
@@ -47,7 +47,6 @@ public:
 		{
 			_myAttacks[i] = atks[i];
 		}
-	}
 	}
 	
 	Pokemon(std::string file)
@@ -193,7 +192,7 @@ public:
 		return *buffer;
 	}
 
-	std::list<std::string> split(const std::string& str) {
+	static std::list<std::string> split(const std::string& str) {
 		std::list<std::string> temp;
 		std::istringstream iss(str);
 		std::string token;
@@ -209,14 +208,14 @@ public:
 	{
 		int count = 0;
 		std::list<std::string> holder = split(ser);
-		std::list<string>::iterator it;
+		std::list<std::string>::iterator it;
 		it = holder.begin();
 		std::string name = it;
 		it++;
 		std::string hp = it;
 		it++;
 		std::string speed = it;
-		attacks atks[4];
+		Attack atks[4];
 		for (int i = 0; i < 4; i++)
 		{
 			it++;
@@ -224,7 +223,7 @@ public:
 			it++;
 			std::string atkDmg = it;
 
-			attacks temp(atkName, atkDmg);
+			Attack temp(atkName, atkDmg);
 			atks[i] = temp;
 		}
 		Pokemon pkm(name, hp, speed, atks, fileDirectory);
