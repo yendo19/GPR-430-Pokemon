@@ -42,6 +42,10 @@ void GameManager::evaluateRound()
 		return;
 	for (BattleEvent move : event_queue)
 	{
+		// ask the server to send the msg to all clients
+		server->sendToAllClients(serializeBattleEvent(move));
+
+		/*
 		for (Player p : connected_players)
 		{
 			if (p.client_id != move.client_id)
@@ -56,6 +60,7 @@ void GameManager::evaluateRound()
 				}
 			}
 		}
+		*/
 	}
 }
 
@@ -116,6 +121,11 @@ void GameManager::queueEvent(char* serializedBattleEvent)
 // CALLED BY SERVER
 void GameManager::broadcastEventsToClients()
 {
+	for (BattleEvent move : event_queue)
+	{
+		// ask the server to send the msg to all clients
+		server->sendToAllClients(serializeBattleEvent(move));
+	}
 	evaluateRound();
 }
 

@@ -30,7 +30,7 @@ void PokemonServer::acceptConnection()
 	connection_sockets.push_back(conn_sock);
 
 	// track the player that just joined
-	//sendToClient(connections, "YOURID " + connections);
+	sendToClient(connections, "YOURID " + connections);
 	connections++;
 }
 
