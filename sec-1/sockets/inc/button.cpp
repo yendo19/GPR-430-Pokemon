@@ -20,7 +20,7 @@ Button::~Button()
 
 }
 
-void Button::updateCallback(std::function<void(std::string data)> func, std::string data)
+void Button::updateCallback(std::function<void(BattleEvent data)> func, BattleEvent data)
 {
 	callback = func;
 	this->data = data;

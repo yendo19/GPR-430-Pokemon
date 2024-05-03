@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ui.h"
 
 void UiManager::setup()
@@ -57,9 +56,10 @@ void UiManager::setupAttacks(std::list<Button>* attacks, Pokemon active)
 		std::string display = active.getAttackAt(i).getName() + " : " + std::to_string(active.getAttackAt(i).getDamage());
 		attacks->push_back(Button(rend, encode, SDL_Color{ 255, 50, 50, 255 }, SDL_Color{ 255, 100, 100, 255 }, display));
 
-		std::string move = Pokemon::serializeMove(active, active.getAttackAt(i));
+		BattleEvent e;
+		e.attackIndex = i;
 
-		attacks->back().updateCallback(Pokemon::pickAttack, move);
+		attacks->back().updateCallback(GameManager::acceptAttackInput, e);
 		attacks->back().updateRect(100, 50, buttonPosX, buttonPosY);
 		buttonPosX += buttonSpacingX;
 		if ((i + 1) % 2 == 0)

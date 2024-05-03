@@ -230,13 +230,6 @@ public:
 
 	}
 
-	static void pickAttack(std::string data)
-	{
-		//TODO:send the chosen attack's power to the other player
-		//for now, just print out the data
-		std::cout << data;
-	}
-
 	static std::string serializeMove(Pokemon pkmn, Attack atk)
 	{
 		std::string temp;

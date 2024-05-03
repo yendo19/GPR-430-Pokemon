@@ -10,16 +10,20 @@ BattleEvent GameManager::deserializeBattleEvent(char* serialized_event)
 {
 	// to be implemented
 
-	// sample
-	Attack attack = Attack();
-	BattleEvent battleEvent =
-	{
-		0,		//target_client_id
-		1,		//target_pokemon
-		attack,	//attack
-	};
+	return BattleEvent();
+}
 
-	return battleEvent;
+GameManager::GameManager()
+{
+}
+
+GameManager::~GameManager()
+{
+}
+
+void GameManager::acceptAttackInput(BattleEvent battleEvent)
+{
+	GetGameManager().broadcastEventsToClients();
 }
 
 // CALLED BY SERVER

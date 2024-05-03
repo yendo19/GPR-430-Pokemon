@@ -5,9 +5,7 @@
 
 struct BattleEvent
 {
-	int target_client_id;
-	int target_pokemon;
-	Attack attack;
+	int attackIndex;
 };
 
 struct Player
@@ -30,6 +28,11 @@ private:
 
 public:
 
+	GameManager();
+	~GameManager();
+
+	static void acceptAttackInput(BattleEvent battleEvent);
+
 	// CALLED BY SERVER
 	// called whenever the server receives a connection
 	void trackPlayer(Player player);
@@ -47,6 +50,11 @@ public:
 	// CALLED BY CLIENTS
 	// when they receive the packet for a pokemon to update
 	void updateEntry(int ownerId, char* serializedPokemon);
+
+	static GameManager & GetGameManager() {
+		static GameManager gm;
+		return gm;
+	}
 };
 
 #pragma endregion
