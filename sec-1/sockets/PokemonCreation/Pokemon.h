@@ -48,9 +48,6 @@ public:
 			_myAttacks[i] = atks[i];
 		}
 	}
-	
-	Pokemon(std::list<char> serialized)
-	{
 	}
 	
 	Pokemon(std::string file)
@@ -208,16 +205,29 @@ public:
 		return temp;
 	}
 
-	void deserialize(std::string ser)
+	static Pokemon deserialize(std::string ser, std::string fileDirectory)
 	{
 		int count = 0;
 		std::list<std::string> holder = split(ser);
-		
-		for (std::string st : holder)
+		std::list<string>::iterator it;
+		it = holder.begin();
+		std::string name = it;
+		it++;
+		std::string hp = it;
+		it++;
+		std::string speed = it;
+		attacks atks[4];
+		for (int i = 0; i < 4; i++)
 		{
-			std::cout << st << std::endl;
-		}
+			it++;
+			std::string atkName = it;
+			it++;
+			std::string atkDmg = it;
 
+			attacks temp(atkName, atkDmg);
+			atks[i] = temp;
+		}
+		Pokemon pkm(name, hp, speed, atks, fileDirectory);
 
 	}
 
