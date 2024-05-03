@@ -154,16 +154,16 @@ bool UiManager::update(std::list<Button>* attacks, float dt)
 	SDL_RenderClear(rend);
 
 	//UPDATE ALL OBJECTS
-	for (Button b : *attacks)
-	{
-		b.update(*mouseX, *mouseY, mbUp);
-	}
 
 	for (int i = 0; i < 2; i++)
 	{
-		if (!GameManager::GetGameManager().getIsServer()) continue;
 		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex((size_t)0)), false, dt);
 		updateTeam(*(GameManager::GetGameManager().getPlayerAtIndex((size_t)1)), true, dt);
+	}
+
+	for (Button b : *attacks)
+	{
+		b.update(*mouseX, *mouseY, mbUp);
 	}
 
 	SDL_RenderPresent(rend);

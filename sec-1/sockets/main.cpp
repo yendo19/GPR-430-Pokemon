@@ -29,7 +29,6 @@ float now() {
 
 void setupBattleUI(UiManager* ui, std::list<Button> attacks, PokemonClient* client)
 {
-	ui->setup();
 	ui->initSprites();
 
 	std::vector<int> spriteIndexes(16);
